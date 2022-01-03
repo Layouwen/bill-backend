@@ -8,8 +8,12 @@ export class SuccessResponse extends BaseResponse {
   constructor(data: any) {
     super();
     this.status = 200;
-    this.message = 'success';
-    this.data = data;
+    if (typeof data === 'string') {
+      this.message = data;
+    } else {
+      this.message = 'success';
+      this.data = data;
+    }
   }
 }
 

@@ -5,11 +5,14 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @Column({ nullable: false })
+  name: string;
 
-  @Column()
-  lastName: string;
+  @Column({ unique: true, nullable: false })
+  username: string;
+
+  @Column({ nullable: false })
+  password: string;
 
   @Column({ default: true })
   isActive: boolean;
