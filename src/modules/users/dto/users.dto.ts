@@ -1,5 +1,10 @@
+import { IsNotEmpty } from 'class-validator';
+
 class BaseUserDto {
+  @IsNotEmpty()
   username?: string;
+
+  @IsNotEmpty()
   password?: string;
 }
 
