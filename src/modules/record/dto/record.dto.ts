@@ -1,21 +1,15 @@
 import { IsNotEmpty } from 'class-validator';
 
-class BaseUserDto {
+export class CreateRecordDto {
   @IsNotEmpty()
-  username?: string;
+  remark: string;
 
   @IsNotEmpty()
-  password?: string;
-}
+  categoryId: string;
 
-export class CreateUserDto extends BaseUserDto {
-  name?: string;
-}
+  @IsNotEmpty()
+  type: string;
 
-export class LoginUserDto extends BaseUserDto {}
-
-export class DeleteUserDto extends BaseUserDto {}
-
-export class UpdateUserDto extends CreateUserDto {
-  newPassword?: string;
+  @IsNotEmpty()
+  amount: string;
 }

@@ -1,5 +1,5 @@
 class BaseResponse {
-  public status: number;
+  public statusCode: number;
   public message: string;
   public data: any;
 }
@@ -7,7 +7,7 @@ class BaseResponse {
 export class SuccessResponse extends BaseResponse {
   constructor(data: any) {
     super();
-    this.status = 200;
+    this.statusCode = 200;
     if (typeof data === 'string') {
       this.message = data;
     } else {
@@ -20,7 +20,7 @@ export class SuccessResponse extends BaseResponse {
 export class ErrorResponse extends BaseResponse {
   constructor(message: string) {
     super();
-    this.status = 400;
+    this.statusCode = 400;
     this.message = message;
     this.data = null;
   }
@@ -29,7 +29,7 @@ export class ErrorResponse extends BaseResponse {
 export class AuthSuccessResponse extends BaseResponse {
   constructor(message: string, token: string) {
     super();
-    this.status = 200;
+    this.statusCode = 200;
     this.message = message;
     this.data = { token };
   }

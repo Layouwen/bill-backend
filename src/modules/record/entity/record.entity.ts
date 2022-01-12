@@ -1,25 +1,40 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from '../../users/entity/user.entity';
 
 @Entity()
 export class Record {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
-  @Column({ nullable: false })
-  userId: number;
+  @ManyToOne(() => User, (user) => user.id)
+  @Column()
+  user: User;
 
   @Column({ nullable: false })
   remark: string;
 
+  @Column({ type: 'timestamp', nullable: false })
+  time: Date;
+
   @Column({ nullable: false })
-  time: string;
+  categoryId: string;
 
-  @Column({ default: true })
-  categoryId: boolean;
-
-  @Column({ default: true })
+  @Column({ nullable: false })
   type: string;
 
-  @Column({ default: true })
+  @Column({ nullable: false })
   amount: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
