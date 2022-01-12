@@ -25,3 +25,12 @@ export class ErrorResponse extends BaseResponse {
     this.data = null;
   }
 }
+
+export class AuthSuccessResponse extends BaseResponse {
+  constructor(message: string, token: string) {
+    super();
+    this.status = 200;
+    this.message = message;
+    this.data = { token };
+  }
+}

@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { RecordModule } from './modules/record/record.module';
 
@@ -14,6 +15,7 @@ import { RecordModule } from './modules/record/record.module';
           autoLoadEntities: true,
         }),
     }),
+    AuthModule,
     UsersModule,
     RecordModule,
   ],

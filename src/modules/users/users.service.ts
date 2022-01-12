@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
-import { LoginUserDto, UpdateUserDto } from './dto/users.dto';
+import { SignDto } from '../auth/dto/auth.dto';
 import { User } from './entity/user.entity';
 
 @Injectable()
@@ -15,27 +15,15 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne(id: number);
-  findOne(where: UpdateUserDto);
-  findOne(id: number, where: UpdateUserDto);
-  findOne(id: number | LoginUserDto, where?: LoginUserDto): Promise<User> {
-    if (id instanceof LoginUserDto) {
-      return this.usersRepository.findOne(id);
-    }
-    if (where) {
-      return this.usersRepository.findOne({
-        id,
-        ...where,
-      });
-    }
-    return this.usersRepository.findOne(id);
+  findOne(username: string) {
+    return this.usersRepository.findOne({ username });
   }
 
   async remove(id: number): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
   }
 
-  create(user: User): Promise<User> {
+  create(user: SignDto): Promise<User> {
     return this.usersRepository.save(user);
   }
 
