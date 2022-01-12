@@ -9,7 +9,7 @@ export class Record {
   userId: number;
 
   @Column({ nullable: false })
-  desc: string;
+  remark: string;
 
   @Column({ nullable: false })
   time: string;
