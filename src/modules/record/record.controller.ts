@@ -7,7 +7,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateRecordDto } from './dto/record.dto';
+import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
 import { RecordService } from './record.service';
 
 @UseGuards(JwtAuthGuard)
@@ -16,8 +16,8 @@ export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
   @Get()
-  async getRecordList(@Request() req: any) {
-    return await this.recordService.findAll(req.user.id);
+  async getRecordList(@Request() req, @Body() body: SearchRecordListDto) {
+    return await this.recordService.findAll(req.user.id, body);
   }
 
   @Post()

@@ -13,3 +13,8 @@ export class CreateRecordDto {
   @IsNotEmpty()
   amount: string;
 }
+
+export class SearchRecordListDto {
+  startDate?: string;
+  endDate?: string;
+}

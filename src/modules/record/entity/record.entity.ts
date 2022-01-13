@@ -2,25 +2,25 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entity/user.entity';
 
 @Entity()
 export class Record {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
-  @Column()
-  user: User;
+  @ManyToOne('User', 'id', { nullable: false })
+  @JoinColumn({ name: 'userId' })
+  userId: number;
 
   @Column({ nullable: false })
   remark: string;
 
-  @Column({ type: 'timestamp', nullable: false })
+  @Column({ type: 'datetime', nullable: false })
   time: Date;
 
   @Column({ nullable: false })
