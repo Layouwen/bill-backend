@@ -39,6 +39,9 @@ export class Icon {
   @Column({ nullable: false })
   name: string;
 
+  @Column({ nullable: false, default: -1 })
+  userId: number;
+
   @Column({ nullable: false })
   url: string;
 

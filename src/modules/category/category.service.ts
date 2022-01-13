@@ -1,9 +1,16 @@
-import * as OSS from 'ali-oss';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ErrorResponse, SuccessResponse } from '../../utils';
+import {
+  ErrorResponse,
+  getFileHash,
+  SuccessResponse,
+  uploadFile,
+} from '../../utils';
+import { AddCategoryDto } from './dto/category.dto';
 import { Category, Icon } from './entity/category.entity';
+
+const DEFAULT_ICON_ID = 0;
 
 @Injectable()
 export class CategoryService {
@@ -14,36 +21,47 @@ export class CategoryService {
     private iconRepository: Repository<Icon>,
   ) {}
 
-  async addCategory(userId: number, body: any, file: any) {
+  async addCategory(
+    userId: number,
+    body: AddCategoryDto,
+    files: Array<Express.Multer.File>,
+  ) {
     const { name } = body;
-    const { mineType, buffer } = file[0];
-    const client = new OSS({
-      region: 'oss-cn-guangzhou',
-      accessKeyId: '',
-      accessKeySecret: '',
-      bucket: 'bill-rearend',
-    });
     try {
-      const { name: fileName, url } = await client.put(
-        name + Date.now(),
-        buffer,
-        {
-          mime: mineType,
-        },
-      );
-      const icon = new Icon();
-      icon.name = fileName;
-      icon.url = url;
-      const { id: iconId } = await this.iconRepository.save(icon);
+      let iconId;
+      if (files) {
+        const { name: fileName, url } = await uploadFile(files[0]);
+        const hash = getFileHash(files[0]);
+        const hasIcon = await this.iconRepository.findOne({
+          where: { name: hash },
+        });
+        if (!hasIcon) {
+          const icon = new Icon();
+          icon.name = fileName;
+          icon.url = url;
+          icon.userId = userId;
+          const { id } = await this.iconRepository.save(icon);
+          iconId = id;
+        } else {
+          iconId = hasIcon.id;
+        }
+      }
+
+      const hasCategory = await this.categoryRepository.findOne({
+        where: { name, userId },
+      });
+      if (hasCategory) {
+        return new SuccessResponse('分类已存在');
+      }
 
       const category = new Category();
       category.name = name;
-      category.iconId = iconId;
+      category.iconId = iconId || DEFAULT_ICON_ID;
       category.userId = userId;
       await this.categoryRepository.save(category);
       return new SuccessResponse('添加成功');
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return new ErrorResponse('添加失败');
     }
   }

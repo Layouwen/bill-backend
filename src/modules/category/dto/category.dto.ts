@@ -1,20 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateRecordDto {
+export class AddCategoryDto {
   @IsNotEmpty()
-  remark: string;
-
-  @IsNotEmpty()
-  categoryId: string;
-
-  @IsNotEmpty()
-  type: string;
-
-  @IsNotEmpty()
-  amount: string;
-}
-
-export class SearchRecordListDto {
-  startDate?: string;
-  endDate?: string;
+  name: string;
 }

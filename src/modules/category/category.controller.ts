@@ -4,14 +4,13 @@ import {
   UseGuards,
   Request,
   Body,
-  Put,
   UseInterceptors,
-  UploadedFile,
-  UploadedFiles,
   Post,
+  UploadedFiles,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoryService } from './category.service';
+import { AddCategoryDto } from './dto/category.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('category')
@@ -20,9 +19,12 @@ export class CategoryController {
 
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
-  async upload(@Request() req, @Body() body, @UploadedFiles() file) {
+  async upload(
+    @Request() req,
+    @Body() body: AddCategoryDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
     const userId = req.user.id;
-    return this.categoryService.addCategory(userId, body, file);
-    // return JSON.stringify(file);
+    return this.categoryService.addCategory(userId, body, files);
   }
 }
