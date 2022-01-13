@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   findOne(username: string) {
-    return this.usersRepository.findOne({ username });
+    return this.usersRepository.findOne({ where: { username } });
   }
 
   async remove(id: number): Promise<DeleteResult> {
