@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
-import { UploadModule } from './modules/upload/upload.module';
 import { UsersModule } from './modules/users/users.module';
 import { RecordModule } from './modules/record/record.module';
 
@@ -20,7 +19,6 @@ import { RecordModule } from './modules/record/record.module';
     AuthModule,
     UsersModule,
     RecordModule,
-    UploadModule,
     CategoryModule,
   ],
   controllers: [AppController],
