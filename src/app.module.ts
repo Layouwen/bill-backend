@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
+import { TopicModule } from './modules/topic/topic.module';
 import { UsersModule } from './modules/users/users.module';
 import { RecordModule } from './modules/record/record.module';
 
@@ -20,6 +21,7 @@ import { RecordModule } from './modules/record/record.module';
     UsersModule,
     RecordModule,
     CategoryModule,
+    TopicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
