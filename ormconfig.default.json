@@ -8,5 +8,6 @@
   "entities": [
     "dist/**/*.entity{.ts,.js}"
   ],
-  "synchronize": false
+  "synchronize": false,
+  "timezone": "+08:00"
 }

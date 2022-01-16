@@ -26,14 +26,9 @@ export class AppController {
   @Post('upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file')) // TODO: 校验文件类型
-  uploadFile(@UploadedFile() file) {
-    console.log(file);
-    const now = new Date();
-    // @ts-ignore
-    while (new Date() - now < 3000) {}
-    return JSON.stringify(file);
+  async uploadFile(@UploadedFile() file) {
     if (!file) return new ErrorResponse('上传失败');
     const { url } = await uploadFile(file);
-    return new SuccessResponse(url);
+    return new SuccessResponse({ url });
   }
 }
