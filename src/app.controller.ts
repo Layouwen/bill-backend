@@ -1,6 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from './modules/auth/jwt-auth.guard';
 import { UsersService } from './modules/users/users.service';
-import { SuccessResponse } from './utils';
+import { ErrorResponse, SuccessResponse, uploadFile } from './utils';
 
 @Controller()
 export class AppController {
@@ -12,5 +21,19 @@ export class AppController {
     delete users.password;
     delete users.isActive;
     return new SuccessResponse(users);
+  }
+
+  @Post('upload')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file')) // TODO: 校验文件类型
+  uploadFile(@UploadedFile() file) {
+    console.log(file);
+    const now = new Date();
+    // @ts-ignore
+    while (new Date() - now < 3000) {}
+    return JSON.stringify(file);
+    if (!file) return new ErrorResponse('上传失败');
+    const { url } = await uploadFile(file);
+    return new SuccessResponse(url);
   }
 }
