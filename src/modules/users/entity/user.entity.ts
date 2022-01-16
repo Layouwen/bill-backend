@@ -23,6 +23,12 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({
+    default:
+      'https://bill-rearend.oss-cn-guangzhou.aliyuncs.com/static/defulatAvatar.jpg',
+  })
+  avatar: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

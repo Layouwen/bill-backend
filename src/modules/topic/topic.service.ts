@@ -34,11 +34,12 @@ export class TopicService {
       },
     });
     const res = topics.map((i) => {
-      const { name } = i.userId as unknown as User;
+      const { name, avatar } = i.userId as unknown as User;
       delete i.userId;
       return {
         ...i,
         name,
+        avatar,
       };
     });
     return new SuccessResponse(res);
