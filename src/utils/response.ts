@@ -22,7 +22,6 @@ export class ErrorResponse extends BaseResponse {
     super();
     this.statusCode = 400;
     this.message = message;
-    this.data = null;
   }
 }
 
