@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -9,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard';
 import { UsersService } from './modules/users/users.service';
-import { ErrorResponse, SuccessResponse, uploadFile } from './utils';
+import { aliOss, ErrorResponse, getFileHash, SuccessResponse } from './utils';
 
 @Controller()
 export class AppController {
@@ -26,9 +27,13 @@ export class AppController {
   @Post('upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file')) // TODO: 校验文件类型
-  async uploadFile(@UploadedFile() file) {
+  async uploadFile(@UploadedFile() file, @Req() req) {
     if (!file) return new ErrorResponse('上传失败');
-    const { url } = await uploadFile(file);
+    const { url } = await aliOss.uploadFile(
+      file,
+      getFileHash(file),
+      `/user_${req.user.username}/`,
+    );
     return new SuccessResponse({ url });
   }
 }

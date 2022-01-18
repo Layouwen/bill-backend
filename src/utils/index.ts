@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 
 export * from './response';
-export * from './oss';
+export * from './upload';
 
 export const getFileHash = (file) => {
   const hashSum = crypto.createHash('sha256');

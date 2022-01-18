@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
+  aliOss,
   ErrorResponse,
   getFileHash,
   SuccessResponse,
-  uploadFile,
 } from '../../utils';
 import { AddCategoryDto } from './dto/category.dto';
 import { Category, Icon } from './entity/category.entity';
@@ -30,7 +30,10 @@ export class CategoryService {
     try {
       let iconId;
       if (files) {
-        const { name: fileName, url } = await uploadFile(files[0]);
+        const { name: fileName, url } = await aliOss.uploadFile(
+          files[0],
+          'category',
+        );
         const hash = getFileHash(files[0]);
         const hasIcon = await this.iconRepository.findOne({
           where: { name: hash },

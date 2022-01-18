@@ -1,7 +1,16 @@
 export default {
   secret: '',
   oss: {
-    accessKeyId: '',
-    accessKeySecret: '',
+    qiniu: {
+      bucket: '',
+      AccessKey: '',
+      SecretKey: '',
+    },
+    ali: {
+      region: '',
+      bucket: '',
+      accessKeyId: '',
+      accessKeySecret: '',
+    },
   },
 };
