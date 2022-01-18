@@ -7,6 +7,7 @@ export const qiniuOss = Oss.init(QiniuOss, {
   bucket: config.oss.qiniu.bucket,
   secretKey: config.oss.qiniu.SecretKey,
   accessKey: config.oss.qiniu.AccessKey,
+  domain: config.oss.qiniu.domain,
 });
 
 export const aliOss = Oss.init(AliOss, {

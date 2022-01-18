@@ -5,6 +5,7 @@ export default {
       bucket: '',
       AccessKey: '',
       SecretKey: '',
+      domain: '',
     },
     ali: {
       region: '',

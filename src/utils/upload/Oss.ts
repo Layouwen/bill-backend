@@ -1,5 +1,5 @@
 import { AliConfig, AliOss } from './AliOss';
-import { QiniuOss } from './QiniuOss';
+import { QiniuOss, QiniuOssConfig } from './QiniuOss';
 
 export interface OssConfig {
   bucket: string;
@@ -20,7 +20,7 @@ export class Oss {
 
   static init<T extends typeof QiniuOss>(
     OssModule: T,
-    config: OssConfig,
+    config: QiniuOssConfig,
   ): QiniuOss;
   static init<T extends typeof AliOss>(OssModule: T, config: AliConfig): AliOss;
   static init(OssModule: any, config) {

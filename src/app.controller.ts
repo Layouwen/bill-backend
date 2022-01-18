@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard';
 import { UsersService } from './modules/users/users.service';
-import { aliOss, ErrorResponse, getFileHash, SuccessResponse } from './utils';
+import { ErrorResponse, getFileHash, qiniuOss, SuccessResponse } from './utils';
 
 @Controller()
 export class AppController {
@@ -29,11 +29,23 @@ export class AppController {
   @UseInterceptors(FileInterceptor('file')) // TODO: 校验文件类型
   async uploadFile(@UploadedFile() file, @Req() req) {
     if (!file) return new ErrorResponse('上传失败');
-    const { url } = await aliOss.uploadFile(
+    // 阿里云
+    // const { url } = await aliOss.uploadFile(
+    //   file,
+    //   getFileHash(file),
+    //   `/user_${req.user.username}/`,
+    // );
+    // return new SuccessResponse({ url });
+
+    // 七牛云
+    const { url } = await qiniuOss.uploadFile(
       file,
       getFileHash(file),
       `/user_${req.user.username}/`,
     );
-    return new SuccessResponse({ url });
+    if (url) {
+      return new SuccessResponse({ url });
+    }
+    return new ErrorResponse('上传失败');
   }
 }
