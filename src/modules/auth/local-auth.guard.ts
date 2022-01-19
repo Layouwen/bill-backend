@@ -4,12 +4,6 @@ import { ErrorResponse } from '../../utils';
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {
-  constructor() {
-    super({
-      // property: '指定的属性名称',
-    });
-  }
-
   handleRequest(err, user, info, context, status) {
     if (status === 400) {
       const { body } = context.getRequest();
@@ -23,6 +17,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
           throw new ErrorResponse(requireFields[field]);
         }
       }
+      throw new ErrorResponse('字段不能为空');
     }
     if (err) throw err;
     // request add user field
