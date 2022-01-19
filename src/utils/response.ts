@@ -1,11 +1,10 @@
 class BaseResponse {
   public statusCode: number;
   public message: string;
-  public data: any;
 }
 
 export class SuccessResponse extends BaseResponse {
-  constructor(data: any) {
+  constructor(private data: any) {
     super();
     this.statusCode = 200;
     if (typeof data === 'string') {
@@ -26,6 +25,8 @@ export class ErrorResponse extends BaseResponse {
 }
 
 export class AuthSuccessResponse extends BaseResponse {
+  private data: any;
+
   constructor(message: string, token: string) {
     super();
     this.statusCode = 200;
