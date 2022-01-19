@@ -2,9 +2,12 @@
 
 ### 200
 
-| statusCode | message |
-| ---------- | ------- |
-| 200        | Success |
+| statusCode | message                     |
+| ---------- | --------------------------- |
+| 200        | Success                     |
+| 101        | username can not be empty   |
+| 102        | password can not be empty   |
+| 103        | wrong user name or password |
 
 ### 400
 
