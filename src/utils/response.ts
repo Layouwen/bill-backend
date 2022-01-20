@@ -4,13 +4,13 @@ class BaseResponse {
 }
 
 export class SuccessResponse extends BaseResponse {
-  constructor(private data: any) {
+  constructor(private data: any, message = 'success') {
     super();
     this.statusCode = 200;
     if (typeof data === 'string') {
       this.message = data;
     } else {
-      this.message = 'success';
+      this.message = message;
       this.data = data;
     }
   }

@@ -6,3 +6,7 @@ export class CreateTopicDto {
 
   images: string[];
 }
+
+export class GetTopicsDto {
+  recommend?: boolean;
+}

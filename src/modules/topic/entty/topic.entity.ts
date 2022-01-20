@@ -23,6 +23,9 @@ export class Topic {
   @Column({ nullable: true, type: 'text' })
   content: string;
 
+  @Column({ nullable: true, default: false })
+  recommend: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

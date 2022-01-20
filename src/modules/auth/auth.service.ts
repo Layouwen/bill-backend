@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthSuccessResponse, ErrorResponse } from '../../utils';
+import {
+  AuthSuccessResponse,
+  ErrorResponse,
+  SuccessResponse,
+} from '../../utils';
 import { User } from '../users/entity/user.entity';
 import { UsersService } from '../users/users.service';
 import { SignDto } from './dto/auth.dto';
@@ -18,7 +22,14 @@ export class AuthService {
    */
   async login(user: User) {
     const payload = { username: user.username, sub: user.id };
-    return new AuthSuccessResponse('登录成功', this.jwtService.sign(payload));
+    const userInfo = await this.usersService.getUserInfo(user.id);
+    return new SuccessResponse(
+      {
+        userInfo,
+        token: this.jwtService.sign(payload),
+      },
+      '登录成功',
+    );
   }
 
   /**

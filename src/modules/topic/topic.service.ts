@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindCondition, Repository } from 'typeorm';
 import { ErrorResponse, SuccessResponse } from '../../utils';
 import { User } from '../users/entity/user.entity';
-import { CreateTopicDto } from './dto/topic.dto';
+import { CreateTopicDto, GetTopicsDto } from './dto/topic.dto';
 import { Topic } from './entty/topic.entity';
 
 @Injectable()
@@ -26,9 +26,13 @@ export class TopicService {
     }
   }
 
-  async getTopics() {
+  async getTopics(getTopicsDto: GetTopicsDto) {
+    const { recommend } = getTopicsDto;
+    const where = {} as FindCondition<Topic>;
+    recommend && (where['recommend'] = recommend);
     const topics = await this.topicRepository.find({
       relations: ['userId'],
+      where,
       order: {
         createdAt: 'DESC',
       },

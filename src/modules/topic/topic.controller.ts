@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseBoolPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateTopicDto } from './dto/topic.dto';
 import { TopicService } from './topic.service';
@@ -8,8 +17,8 @@ export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
   @Get()
-  async getTopics() {
-    return await this.topicService.getTopics();
+  async getTopics(@Query('recommend', ParseBoolPipe) recommend: boolean) {
+    return await this.topicService.getTopics({ recommend });
   }
 
   @Post()
