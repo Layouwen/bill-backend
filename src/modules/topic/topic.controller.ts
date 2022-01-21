@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  Param,
   ParseBoolPipe,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
@@ -25,5 +28,26 @@ export class TopicController {
   @UseGuards(JwtAuthGuard)
   async addTopic(@Req() req, @Body() addTopicDto: CreateTopicDto) {
     return await this.topicService.addTopic(req.user.id, addTopicDto);
+  }
+
+  @Put('like/:id')
+  @UseGuards(JwtAuthGuard)
+  async topicLike(@Req() req, @Param('id') id: number) {
+    const flag = this.topicService.toggleLike(req.user.id, id);
+    if (flag) {
+      throw new HttpException(
+        {
+          message: '点赞成功',
+        },
+        200,
+      );
+    } else {
+      throw new HttpException(
+        {
+          message: '点赞失败',
+        },
+        400,
+      );
+    }
   }
 }

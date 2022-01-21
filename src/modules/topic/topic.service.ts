@@ -4,13 +4,15 @@ import { FindCondition, Repository } from 'typeorm';
 import { ErrorResponse, SuccessResponse } from '../../utils';
 import { User } from '../users/entity/user.entity';
 import { CreateTopicDto, GetTopicsDto } from './dto/topic.dto';
-import { Topic } from './entty/topic.entity';
+import { Topic, TopicLike } from './entty/topic.entity';
 
 @Injectable()
 export class TopicService {
   constructor(
     @InjectRepository(Topic)
     private readonly topicRepository: Repository<Topic>,
+    @InjectRepository(TopicLike)
+    private readonly topicLikeRepository: Repository<TopicLike>,
   ) {}
 
   async addTopic(userId: number, createTopicDto: CreateTopicDto) {
@@ -47,5 +49,29 @@ export class TopicService {
       };
     });
     return new SuccessResponse(res);
+  }
+
+  async toggleLike(userId, topicId) {
+    try {
+      const findOne = await this.topicLikeRepository.findOne({
+        where: { userId, topicId },
+      });
+      if (!findOne) {
+        await this.topicLikeRepository.save({
+          userId,
+          topicId,
+          isLike: true,
+        });
+      } else {
+        await this.topicLikeRepository.update(findOne.id, {
+          topicId,
+          isLike: !findOne.isLike,
+        });
+      }
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 }
