@@ -24,17 +24,17 @@ export class CategoryService {
   async addCategory(
     userId: number,
     body: AddCategoryDto,
-    files: Array<Express.Multer.File>,
+    file: Express.Multer.File,
   ) {
     const { name } = body;
     try {
       let iconId;
-      if (files) {
+      if (file) {
         const { name: fileName, url } = await aliOss.uploadFile(
-          files[0],
+          file,
           'category',
         );
-        const hash = getFileHash(files[0]);
+        const hash = getFileHash(file);
         const hasIcon = await this.iconRepository.findOne({
           where: { name: hash },
         });

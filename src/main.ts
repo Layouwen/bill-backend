@@ -19,6 +19,10 @@ async function bootstrap() {
     .setTitle('蓝鲸记账api文档')
     .setDescription('技术团队：梁又文、梁金俊')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
+      'Token',
+    )
     .build();
   const options: SwaggerDocumentOptions = {
     ignoreGlobalPrefix: false,
