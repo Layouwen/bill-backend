@@ -661,6 +661,13 @@
     jsonc-parser "3.0.0"
     pluralize "8.0.0"
 
+"@nestjs/serve-static@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.nlark.com/@nestjs/serve-static/download/@nestjs/serve-static-2.2.2.tgz#8e9dc2fc6c042ddac5133b957d6bc25d9f8fa225"
+  integrity sha1-jp3C/GwELdrFEzuVfWvCXZ+PoiU=
+  dependencies:
+    path-to-regexp "0.1.7"
+
 "@nestjs/swagger@^5.1.5":
   version "5.1.5"
   resolved "https://registry.npmmirror.com/@nestjs/swagger/download/@nestjs/swagger-5.1.5.tgz?cache=0&sync_timestamp=1637232225094&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40nestjs%2Fswagger%2Fdownload%2F%40nestjs%2Fswagger-5.1.5.tgz#ee565e98b6d05b7a5d90c9f15b4d72586b6f77cf"

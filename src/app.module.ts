@@ -8,6 +8,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { TopicModule } from './modules/topic/topic.module';
 import { UsersModule } from './modules/users/users.module';
 import { RecordModule } from './modules/record/record.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -16,6 +17,9 @@ import { RecordModule } from './modules/record/record.module';
         Object.assign(await getConnectionOptions(), {
           autoLoadEntities: true,
         }),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: __dirname + '/../../bill-frontend/dist',
     }),
     AuthModule,
     UsersModule,
