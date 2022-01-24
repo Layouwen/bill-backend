@@ -9,4 +9,5 @@ export class CreateTopicDto {
 
 export class GetTopicsDto {
   recommend?: boolean;
+  userId: number;
 }

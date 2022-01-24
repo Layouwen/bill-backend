@@ -20,8 +20,14 @@ export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
   @Get()
-  async getTopics(@Query('recommend', ParseBoolPipe) recommend: boolean) {
-    return await this.topicService.getTopics({ recommend });
+  async getTopics(
+    @Query('recommend', ParseBoolPipe) recommend: boolean,
+    @Req() req,
+  ) {
+    return await this.topicService.getTopics({
+      recommend,
+      userId: req.userInfo.id || null,
+    });
   }
 
   @Post()

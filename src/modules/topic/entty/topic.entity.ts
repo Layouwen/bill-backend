@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -31,6 +32,10 @@ export class Topic {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => TopicLike, (topicLike) => topicLike.topicId)
+  @JoinColumn({ name: 'topicLike' })
+  topicLikes: TopicLike[];
 }
 
 @Entity()
@@ -40,6 +45,7 @@ export class TopicLike {
 
   @ManyToOne('User', 'id', { nullable: false })
   @JoinColumn({ name: 'userId' })
+  @Column()
   userId: number;
 
   @ManyToOne('Topic', 'id', { nullable: false })

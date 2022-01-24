@@ -29,11 +29,11 @@ export class TopicService {
   }
 
   async getTopics(getTopicsDto: GetTopicsDto) {
-    const { recommend } = getTopicsDto;
+    const { recommend, userId } = getTopicsDto;
     const where = {} as FindCondition<Topic>;
     recommend && (where['recommend'] = recommend);
     const topics = await this.topicRepository.find({
-      relations: ['userId'],
+      relations: ['userId', 'topicLikes'],
       where,
       order: {
         createdAt: 'DESC',
@@ -41,11 +41,18 @@ export class TopicService {
     });
     const res = topics.map((i) => {
       const { name, avatar } = i.userId as unknown as User;
+      const likes = i.topicLikes.filter((i) => i.isLike);
+      const isLike = likes.some((i) => {
+        return i.userId === userId;
+      });
       delete i.userId;
+      delete i.topicLikes;
       return {
         ...i,
         name,
         avatar,
+        likeCount: likes.length,
+        isLike,
       };
     });
     return new SuccessResponse(res);
