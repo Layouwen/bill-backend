@@ -41,7 +41,6 @@ export class RecordService {
     const params = {
       userId,
       ...createRecordDto,
-      time: new Date(),
     } as Record;
     try {
       await this.recordRepository.save(params);

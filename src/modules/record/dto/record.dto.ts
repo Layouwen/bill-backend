@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateRecordDto {
@@ -6,6 +7,10 @@ export class CreateRecordDto {
 
   @IsNotEmpty()
   categoryId: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ type: 'string', format: 'date-time' })
+  time: Date;
 
   @IsNotEmpty()
   type: string;
