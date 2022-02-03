@@ -23,7 +23,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         statusCode: '401',
       });
     }
-    // request add user field
     return user;
   }
 }

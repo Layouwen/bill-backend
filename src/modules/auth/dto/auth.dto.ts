@@ -10,3 +10,8 @@ export class SignDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class LoginDto {
+  id: number;
+  username: string;
+}
