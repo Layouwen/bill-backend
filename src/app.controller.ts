@@ -16,14 +16,6 @@ import { ErrorResponse, getFileHash, qiniuOss, SuccessResponse } from './utils';
 export class AppController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  async test() {
-    const users = await this.usersService.findOne('ddd');
-    delete users.password;
-    delete users.isActive;
-    return new SuccessResponse(users);
-  }
-
   @Post('upload')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file')) // TODO: 校验文件类型
