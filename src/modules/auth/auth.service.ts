@@ -16,7 +16,7 @@ export class AuthService {
   ) {}
 
   async login({ id, username }: LoginDto) {
-    const userInfo = await this.usersService.findOne(username);
+    const userInfo = await this.usersService.getUserInfo(id);
     return new SuccessResponse(
       {
         userInfo,
