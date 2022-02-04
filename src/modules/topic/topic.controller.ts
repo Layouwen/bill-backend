@@ -11,49 +11,77 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { IRequest } from '../../../custom';
+import { SuccessResponse } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateTopicDto } from './dto/topic.dto';
+import {
+  AddCommentDto,
+  CreateTopicDto,
+  getTopicDetailDto,
+} from './dto/topic.dto';
 import { TopicService } from './topic.service';
 
+@ApiTags('topic')
 @Controller('topic')
 export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
+  @Get('/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: '获取文章详情' })
+  async getTopicsDetail(
+    @Param() params: getTopicDetailDto,
+    @Req() req: IRequest,
+  ) {
+    const topic = await this.topicService.getTopicsDetail(
+      parseInt(params.id),
+      req.info?.id,
+    );
+    return new SuccessResponse(topic);
+  }
+
   @Get()
+  @ApiOperation({ summary: '获取文章列表' })
   async getTopics(
     @Query('recommend', ParseBoolPipe) recommend: boolean,
     @Req() req,
   ) {
-    return await this.topicService.getTopics({
-      recommend,
-      userId: req.userInfo.id || null,
-    });
+    const topics = await this.topicService.getTopics(
+      { recommend },
+      req.info?.id,
+    );
+    return new SuccessResponse(topics);
+  }
+
+  @Post(':id/comment')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Token')
+  @ApiOperation({ summary: '评论文章' })
+  async addComment(
+    @Req() req,
+    @Param('id') id: string,
+    @Body() addComment: AddCommentDto,
+  ) {
+    await this.topicService.addComment(req.user.id, id, addComment);
+    return new SuccessResponse('评论成功');
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Token')
+  @ApiOperation({ summary: '创建文章' })
   async addTopic(@Req() req, @Body() addTopicDto: CreateTopicDto) {
-    return await this.topicService.addTopic(req.user.id, addTopicDto);
+    await this.topicService.addTopic(req.user.id, addTopicDto);
+    return new SuccessResponse('添加成功');
   }
 
   @Put('like/:id')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Token')
+  @ApiOperation({ summary: '点赞' })
   async topicLike(@Req() req, @Param('id') id: number) {
-    const flag = this.topicService.toggleLike(req.user.id, id);
-    if (flag) {
-      throw new HttpException(
-        {
-          message: '点赞成功',
-        },
-        200,
-      );
-    } else {
-      throw new HttpException(
-        {
-          message: '点赞失败',
-        },
-        400,
-      );
-    }
+    const flag = await this.topicService.toggleLike(req.user.id, id);
+    throw new HttpException({ message: flag ? '点赞成功' : '点赞失败' }, 200);
   }
 }

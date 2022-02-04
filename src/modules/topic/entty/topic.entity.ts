@@ -2,21 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../users/entity/user.entity';
 
 @Entity()
 export class Topic {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne('User', 'id', { nullable: false })
-  @JoinColumn({ name: 'userId' })
-  userId: number;
 
   @Column({ type: 'json' })
   images: string[];
@@ -27,15 +23,20 @@ export class Topic {
   @Column({ nullable: true, default: false })
   recommend: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @OneToMany(() => TopicLike, (topicLike) => topicLike.topicId)
-  @JoinColumn({ name: 'topicLike' })
+  @ManyToOne('User', 'topics')
+  user: User;
+
+  @OneToMany('TopicLike', 'topic')
   topicLikes: TopicLike[];
+
+  @OneToMany('Comment', 'topic')
+  comments: Comment[];
 }
 
 @Entity()
@@ -43,21 +44,18 @@ export class TopicLike {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne('User', 'id', { nullable: false })
-  @JoinColumn({ name: 'userId' })
-  @Column()
-  userId: number;
-
-  @ManyToOne('Topic', 'id', { nullable: false })
-  @JoinColumn({ name: 'topicId' })
-  topicId: number;
-
   @Column({ nullable: false, default: false })
   isLike: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @ManyToOne('User', 'topicLikes')
+  user: User;
+
+  @ManyToOne('Topic', 'topicLikes')
+  topic: Topic;
 }

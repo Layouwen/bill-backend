@@ -2,9 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from '../../category/entity/category.entity';
+import { Record } from '../../record/entity/record.entity';
+import { Comment } from '../../topic/entty/comment.entity';
+import { Topic, TopicLike } from '../../topic/entty/topic.entity';
 
 @Entity()
 export class User {
@@ -29,9 +34,24 @@ export class User {
   })
   avatar: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @OneToMany('Topic', 'user')
+  topics: Topic[];
+
+  @OneToMany('TopicLike', 'user')
+  topicLikes: TopicLike[];
+
+  @OneToMany('Record', 'user')
+  records: Record[];
+
+  @OneToMany('Category', 'user')
+  category: Category[];
+
+  @OneToMany('Comment', 'user')
+  comments: Comment[];
 }

@@ -1,71 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  aliOss,
-  ErrorResponse,
-  getFileHash,
-  SuccessResponse,
-} from '../../utils';
+import { getFileHash, qiniuOss } from '../../utils';
+import { User } from '../users/entity/user.entity';
 import { AddCategoryDto } from './dto/category.dto';
-import { Category, Icon } from './entity/category.entity';
-
-const DEFAULT_ICON_ID = 0;
+import { Category } from './entity/category.entity';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
-    @InjectRepository(Icon)
-    private iconRepository: Repository<Icon>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async addCategory(
     userId: number,
-    body: AddCategoryDto,
+    { name }: AddCategoryDto,
     file: Express.Multer.File,
   ) {
-    const { name } = body;
-    try {
-      let iconId;
-      if (file) {
-        const { name: fileName, url } = await aliOss.uploadFile(
-          file,
-          'category',
-        );
-        const hash = getFileHash(file);
-        const hasIcon = await this.iconRepository.findOne({
-          where: { name: hash },
-        });
-        if (!hasIcon) {
-          const icon = new Icon();
-          icon.name = fileName;
-          icon.url = url;
-          icon.userId = userId;
-          const { id } = await this.iconRepository.save(icon);
-          iconId = id;
-        } else {
-          iconId = hasIcon.id;
-        }
-      }
+    const user = await this.userRepository.findOne(userId);
+    const findFromName = await this.categoryRepository.findOne({
+      user,
+      name,
+    });
+    if (findFromName) throw new HttpException({ message: '该分类已存在' }, 200);
 
-      const hasCategory = await this.categoryRepository.findOne({
-        where: { name, userId },
-      });
-      if (hasCategory) {
-        return new SuccessResponse('分类已存在');
-      }
+    const { url } = await qiniuOss.uploadFile(
+      file,
+      getFileHash(file),
+      `/user_${user.username}/`,
+    );
 
-      const category = new Category();
-      category.name = name;
-      category.iconId = iconId || DEFAULT_ICON_ID;
-      category.userId = userId;
-      await this.categoryRepository.save(category);
-      return new SuccessResponse('添加成功');
-    } catch (e) {
-      console.error(e);
-      return new ErrorResponse('添加失败');
-    }
+    const category = new Category();
+    category.user = user;
+    category.name = name;
+    category.icon = url;
+    return await this.categoryRepository.save(category);
   }
 }

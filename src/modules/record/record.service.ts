@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
 import { ErrorResponse, SuccessResponse } from '../../utils';
+import { Category } from '../category/entity/category.entity';
+import { User } from '../users/entity/user.entity';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
 import { Record } from './entity/record.entity';
 
@@ -11,14 +13,17 @@ export class RecordService {
   constructor(
     @InjectRepository(Record)
     private recordRepository: Repository<Record>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   async findAll(userId: number, params: SearchRecordListDto) {
     const { startDate, endDate } = params;
+    const user = this.userRepository.findOne(userId);
     const options = {
-      where: {
-        userId,
-      },
+      where: { user },
       order: { time: 'DEST' },
     } as ObjectLiteral;
     if (startDate && endDate) {
@@ -38,15 +43,20 @@ export class RecordService {
   }
 
   async create(userId: number, createRecordDto: CreateRecordDto) {
-    const params = {
-      userId,
-      ...createRecordDto,
-    } as Record;
+    const { time, remark, type, amount, categoryId } = createRecordDto;
+    const user = await this.userRepository.findOne(userId);
+    const category = await this.categoryRepository.findOne(categoryId);
+    const record = new Record();
+    record.user = user;
+    record.time = dayjs(time).format();
+    record.remark = remark;
+    record.type = type;
+    record.amount = amount;
+    record.category = category;
     try {
-      await this.recordRepository.save(params);
+      await this.recordRepository.save(record);
       return new SuccessResponse('创建成功');
     } catch (e) {
-      console.log(e);
       return new ErrorResponse('创建失败');
     }
   }

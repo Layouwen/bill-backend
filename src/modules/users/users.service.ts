@@ -20,20 +20,20 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async getUserInfo(id: number) {
-    return await this.usersRepository.findOne(id, {
+  getUserInfo(id: number) {
+    return this.usersRepository.findOne(id, {
       select: ['id', 'username', 'name', 'avatar'],
     });
   }
 
-  async updateAvatar(id: number, updateUserInfoDto: UpdateUserInfoDto) {
+  updateBaseInfo(id: number, updateUserInfoDto: UpdateUserInfoDto) {
     const { name, avatar } = updateUserInfoDto;
-    return await this.usersRepository.update(id, { name, avatar });
+    return this.usersRepository.update(id, { name, avatar });
   }
 
-  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {
+  updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {
     const { password, newPassword } = updatePasswordDto;
-    return await this.usersRepository.update(
+    return this.usersRepository.update(
       { id, password },
       { password: newPassword },
     );

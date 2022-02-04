@@ -2,29 +2,23 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from '../../category/entity/category.entity';
+import { User } from '../../users/entity/user.entity';
 
 @Entity()
 export class Record {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne('User', 'id', { nullable: false })
-  @JoinColumn({ name: 'userId' })
-  userId: number;
-
   @Column({ nullable: false })
   remark: string;
 
-  @Column({ type: 'datetime', nullable: false })
-  time: Date;
-
-  @Column({ nullable: false })
-  categoryId: string;
+  @Column({ type: 'timestamp' })
+  time: string;
 
   @Column({ nullable: false })
   type: string;
@@ -32,9 +26,15 @@ export class Record {
   @Column({ nullable: false })
   amount: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @ManyToOne('User', 'records')
+  user: User;
+
+  @ManyToOne('Category', 'records')
+  category: Category;
 }

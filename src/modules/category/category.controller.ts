@@ -8,13 +8,21 @@ import {
   Post,
   UploadedFile,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { SuccessResponse } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoryService } from './category.service';
 import { AddCategoryDto } from './dto/category.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('Token')
+@ApiTags('category')
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -39,12 +47,14 @@ export class CategoryController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: '添加类别' })
   async upload(
     @Request() req,
     @Body() body: AddCategoryDto,
     @UploadedFile() files: Express.Multer.File,
   ) {
     const userId = req.user.id;
-    return this.categoryService.addCategory(userId, body, files);
+    await this.categoryService.addCategory(userId, body, files);
+    return new SuccessResponse('添加成功');
   }
 }

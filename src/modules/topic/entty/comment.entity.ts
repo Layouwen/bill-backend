@@ -3,33 +3,26 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Record } from '../../record/entity/record.entity';
 import { User } from '../../users/entity/user.entity';
+import { Topic } from './topic.entity';
 
 @Entity()
-export class Category {
+export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ nullable: false })
-  name: string;
-
   @Column({ type: 'varchar' })
-  icon: string;
-
-  @CreateDateColumn()
+  content: string;
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
-
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
-
-  @ManyToOne('User', 'category')
+  @ManyToOne('User', 'comments')
   user: User;
-
-  @OneToMany('Record', 'category')
-  records: Record[];
+  @ManyToOne('Topic', 'comments')
+  topic: Topic;
+  @ManyToOne('Comment', 'replyTo')
+  replyTo: Comment;
 }

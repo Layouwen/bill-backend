@@ -4,7 +4,9 @@ class BaseResponse {
 }
 
 export class SuccessResponse extends BaseResponse {
-  constructor(private data: any, message = 'success') {
+  data: string;
+
+  constructor(data: any, message = 'success') {
     super();
     this.statusCode = 200;
     if (typeof data === 'string') {
