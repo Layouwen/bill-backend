@@ -10,6 +10,7 @@ import { TopicModule } from './modules/topic/topic.module';
 import { UsersModule } from './modules/users/users.module';
 import { RecordModule } from './modules/record/record.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CheckInModule } from './modules/check-in/check-in.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     RecordModule,
     CategoryModule,
     TopicModule,
+    CheckInModule,
   ],
   controllers: [AppController],
   providers: [AppService],

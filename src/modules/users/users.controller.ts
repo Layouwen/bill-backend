@@ -2,6 +2,8 @@ import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ErrorResponse, SuccessResponse } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CheckInService } from '../check-in/check-in.service';
+import { RecordService } from '../record/record.service';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 
@@ -10,13 +12,27 @@ import { UsersService } from './users.service';
 @ApiBearerAuth('Token')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly checkInService: CheckInService,
+    private readonly recordService: RecordService,
+  ) {}
 
   @Get('userInfo')
   @ApiOperation({ summary: '获取用户信息' })
   async getUserInfo(@Req() req) {
-    const res = await this.usersService.getUserInfo(req.user.id);
-    return new SuccessResponse(res);
+    const userInfo = await this.usersService.getUserInfo(req.user.id);
+    const checkIn = !!(await this.checkInService.hasCheckIn(req.user.id));
+    const { checkInAll, checkInKeep } =
+      await this.checkInService.getCheckInInfo(req.user.id);
+    const records = await this.recordService.findAll(req.user.id);
+    return new SuccessResponse({
+      ...userInfo,
+      checkIn,
+      checkInAll,
+      checkInKeep,
+      recordCount: records[1],
+    });
   }
 
   @Put('userInfo')

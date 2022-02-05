@@ -19,27 +19,27 @@ export class RecordService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async findAll(userId: number, params: SearchRecordListDto) {
-    const { startDate, endDate } = params;
-    const user = this.userRepository.findOne(userId);
+  async findAll(userId: number, params?: SearchRecordListDto) {
     const options = {
-      where: { user },
+      where: { user: userId },
       order: { time: 'DEST' },
     } as ObjectLiteral;
-    if (startDate && endDate) {
-      options.where.time = Between(
-        dayjs(startDate).toDate(),
-        dayjs(endDate).toDate(),
-      );
+    if (params) {
+      const { startDate, endDate } = params;
+      if (startDate && endDate) {
+        options.where.time = Between(
+          dayjs(startDate).toDate(),
+          dayjs(endDate).toDate(),
+        );
+      }
+      if (startDate) {
+        options.where.time = Between(
+          dayjs(startDate).startOf('month').toDate(),
+          dayjs(startDate).endOf('month').toDate(),
+        );
+      }
     }
-    if (startDate) {
-      options.where.time = Between(
-        dayjs(startDate).startOf('month').toDate(),
-        dayjs(startDate).endOf('month').toDate(),
-      );
-    }
-    const recordList = await this.recordRepository.find(options);
-    return new SuccessResponse(recordList);
+    return await this.recordRepository.findAndCount(options);
   }
 
   async create(userId: number, createRecordDto: CreateRecordDto) {

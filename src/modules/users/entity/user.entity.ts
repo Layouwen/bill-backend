@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Category } from '../../category/entity/category.entity';
+import { CheckIn } from '../../check-in/entities/check-in.entity';
 import { Record } from '../../record/entity/record.entity';
 import { Comment } from '../../topic/entty/comment.entity';
 import { Topic, TopicLike } from '../../topic/entty/topic.entity';
@@ -54,4 +55,7 @@ export class User {
 
   @OneToMany('Comment', 'user')
   comments: Comment[];
+
+  @OneToMany('CheckIn', 'user')
+  checkIns: CheckIn[];
 }

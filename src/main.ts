@@ -8,6 +8,10 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as dayjs from 'dayjs';
+import * as isBetween from 'dayjs/plugin/isBetween';
+
+dayjs.extend(isBetween);
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
