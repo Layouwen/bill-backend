@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+  server:
+    container_name: bill
+    build:
+      context: ../
+      dockerfile: ./bill-backend/Dockerfile
+    ports:
+      - "3001:3001"
