@@ -1,0 +1,6 @@
+#!/bin/bash
+
+git pull
+cd ../frontend
+git pull
+docker-componse up --build -d
