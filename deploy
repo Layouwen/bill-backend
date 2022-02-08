@@ -3,4 +3,4 @@
 git pull
 cd ../frontend
 git pull
-docker-componse up --build -d
+docker-compose up --build -d
