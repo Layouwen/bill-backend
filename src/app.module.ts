@@ -21,7 +21,7 @@ import { CheckInModule } from './modules/check-in/check-in.module';
         }),
     }),
     ServeStaticModule.forRoot({
-      rootPath: __dirname + '/../../bill-frontend/dist',
+      rootPath: __dirname + '/../../frontend/dist',
     }),
     AuthModule,
     UsersModule,

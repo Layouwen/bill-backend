@@ -11,4 +11,4 @@ WORKDIR /app/backend
 RUN npm i
 RUN npm run build
 EXPOSE 3001
-CMD ["pm2", "start", "dist/main.js", "--name", "bill-h5"]
+CMD ["pm2-runtime", "start", "dist/main.js", "--name", "bill-h5"]
