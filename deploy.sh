@@ -2,7 +2,7 @@
 
 git pull
 pwd
-cd ../frontend
+cd ../bill-frontend
 pwd
 git pull
 
