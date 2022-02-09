@@ -1,10 +1,10 @@
 #!/bin/bash
 
-git pull && \
+git pull
 pwd
 cd ../bill-frontend
 pwd
-git pull && \
+git pull
 cd ../bill-backend
 
 docker-compose down
