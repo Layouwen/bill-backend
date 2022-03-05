@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:15-alpine
 RUN npm install -g nrm && \
     nrm use taobao && \
     npm install -g pnpm pm2
