@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ErrorResponse, SuccessResponse } from '../../utils';
+import { success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from '../check-in/check-in.service';
 import { RecordService } from '../record/record.service';
@@ -26,7 +26,7 @@ export class UsersController {
     const { checkInAll, checkInKeep } =
       await this.checkInService.getCheckInInfo(req.user.id);
     const records = await this.recordService.findAll(req.user.id);
-    return new SuccessResponse({
+    return success({
       ...userInfo,
       checkIn,
       checkInAll,
@@ -42,7 +42,7 @@ export class UsersController {
     @Body() updateUserInfoDto: UpdateUserInfoDto,
   ) {
     await this.usersService.updateBaseInfo(req.user.id, updateUserInfoDto);
-    return new SuccessResponse('更新成功');
+    return updated();
   }
 
   @Put('password')
@@ -55,7 +55,7 @@ export class UsersController {
       req.user.id,
       updatePasswordDto,
     );
-    if (affected) return new SuccessResponse('更新密码成功');
-    return new ErrorResponse('旧密码错误');
+    if (affected) return updated();
+    return fail('旧密码错误');
   }
 }

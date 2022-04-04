@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IRequest } from '../../../custom';
-import { SuccessResponse } from '../../utils';
+import { created, success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   AddCommentDto,
@@ -38,7 +38,7 @@ export class TopicController {
       parseInt(params.id),
       req.info?.id,
     );
-    return new SuccessResponse(topic);
+    return success(topic);
   }
 
   @Get()
@@ -51,7 +51,7 @@ export class TopicController {
       { recommend },
       req.info?.id,
     );
-    return new SuccessResponse(topics);
+    return success(topics);
   }
 
   @Post(':id/comment')
@@ -64,7 +64,7 @@ export class TopicController {
     @Body() addComment: AddCommentDto,
   ) {
     await this.topicService.addComment(req.user.id, id, addComment);
-    return new SuccessResponse('评论成功');
+    return success('评论成功');
   }
 
   @Post()
@@ -73,7 +73,7 @@ export class TopicController {
   @ApiOperation({ summary: '创建文章' })
   async addTopic(@Req() req, @Body() addTopicDto: CreateTopicDto) {
     await this.topicService.addTopic(req.user.id, addTopicDto);
-    return new SuccessResponse('添加成功');
+    return created();
   }
 
   @Put('like/:id')

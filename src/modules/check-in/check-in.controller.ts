@@ -1,6 +1,6 @@
 import { Controller, Post, UseGuards, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SuccessResponse } from '../../utils';
+import { success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from './check-in.service';
 
@@ -15,7 +15,7 @@ export class CheckInController {
   @ApiOperation({ summary: '打卡' })
   async create(@Req() req) {
     await this.checkInService.create(req.user.id);
-    return new SuccessResponse('打卡成功');
+    return success('打卡成功');
   }
 
   //

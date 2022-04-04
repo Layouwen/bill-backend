@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthSuccessResponse, ErrorResponse } from '../../utils';
+import { throwFail } from '../../utils';
 import { UsersService } from '../users/users.service';
 import { SignDto } from './dto/auth.dto';
 
@@ -18,12 +18,9 @@ export class AuthService {
   async sign(signDto: SignDto) {
     const { username } = signDto;
     const user = await this.usersService.findOne(username);
-    if (user) return new ErrorResponse('用户已存在');
+    if (user) throwFail('用户已存在');
     const { id } = await this.usersService.create(signDto);
-    return new AuthSuccessResponse(
-      '注册成功',
-      this.jwtService.sign({ username, id }),
-    );
+    return { token: this.jwtService.sign({ username, id }) };
   }
 
   async validateUser(username: string, password: string): Promise<any> {

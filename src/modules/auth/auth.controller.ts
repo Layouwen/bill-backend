@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SuccessResponse } from '../../utils';
+import { success } from '../../utils';
 import { User } from '../users/entity/user.entity';
 import { AuthService } from './auth.service';
 import { LoginDto, SignDto } from './dto/auth.dto';
@@ -24,7 +24,7 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@Request() req) {
     const userInfo = await this.authService.login(req.user as User);
-    return new SuccessResponse(
+    return success(
       {
         userInfo,
         token: this.jwtService.sign({
@@ -38,7 +38,8 @@ export class AuthController {
 
   @Post('sign')
   @ApiOperation({ summary: '注册' })
-  sign(@Body() signDto: SignDto) {
-    return this.authService.sign(signDto);
+  async sign(@Body() signDto: SignDto) {
+    const data = await this.authService.sign(signDto);
+    return success(data, '注册成功');
   }
 }

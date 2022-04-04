@@ -15,7 +15,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { SuccessResponse } from '../../utils';
+import { created, success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoryService } from './category.service';
 import { AddCategoryDto } from './dto/category.dto';
@@ -55,6 +55,6 @@ export class CategoryController {
   ) {
     const userId = req.user.id;
     await this.categoryService.addCategory(userId, body, files);
-    return new SuccessResponse('添加成功');
+    return created();
   }
 }

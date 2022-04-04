@@ -2,7 +2,7 @@ import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
-import { ErrorResponse, SuccessResponse } from '../../utils';
+import { created, success } from '../../utils';
 import { Category } from '../category/entity/category.entity';
 import { User } from '../users/entity/user.entity';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
@@ -55,9 +55,9 @@ export class RecordService {
     record.category = category;
     try {
       await this.recordRepository.save(record);
-      return new SuccessResponse('创建成功');
+      return created();
     } catch (e) {
-      return new ErrorResponse('创建失败');
+      return fail('创建失败');
     }
   }
 }

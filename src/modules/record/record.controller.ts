@@ -7,7 +7,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SuccessResponse } from '../../utils';
+import { success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
 import { RecordService } from './record.service';
@@ -23,7 +23,7 @@ export class RecordController {
   @ApiOperation({ summary: '获取记录' })
   async getRecordList(@Request() req, @Body() body: SearchRecordListDto) {
     const [records] = await this.recordService.findAll(req.user.id, body);
-    return new SuccessResponse(records);
+    return success(records);
   }
 
   @Post()

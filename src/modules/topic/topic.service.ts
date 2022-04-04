@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
-import { ErrorResponse } from '../../utils';
 import { User } from '../users/entity/user.entity';
 import { AddCommentDto, CreateTopicDto, GetTopicsDto } from './dto/topic.dto';
 import { Comment } from './entty/comment.entity';
@@ -22,7 +21,7 @@ export class TopicService {
 
   async addTopic(userId: number, createTopicDto: CreateTopicDto) {
     const { content, images } = createTopicDto;
-    if (!content) return new ErrorResponse('内容不能为空');
+    if (!content) return fail('内容不能为空');
     const user = await this.userRepository.findOne(userId);
     const topic = new Topic();
     topic.user = user;
