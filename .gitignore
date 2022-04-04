@@ -34,5 +34,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-ormconfig.json
+ormconfig.base.js
 /src/config/index.ts
