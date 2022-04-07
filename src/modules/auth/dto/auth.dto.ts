@@ -2,8 +2,8 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class SignDto {
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: '不能为空' })
+  @IsString({ message: '请输入字符串' })
   @ApiProperty({
     description: '用户名',
     type: 'string',
@@ -11,8 +11,8 @@ export class SignDto {
   })
   name: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: '不能为空' })
+  @IsString({ message: '请输入字符串' })
   @ApiProperty({
     description: '账号',
     type: 'string',
@@ -20,8 +20,8 @@ export class SignDto {
   })
   username: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: '不能为空' })
+  @IsString({ message: '请输入字符串' })
   @ApiProperty({
     description: '密码',
     type: 'string',

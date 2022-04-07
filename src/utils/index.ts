@@ -2,6 +2,7 @@ import * as crypto from 'crypto';
 
 export * from './response';
 export * from './upload';
+export * from './validation';
 
 export const getFileHash = (file) => {
   const hashSum = crypto.createHash('sha256');

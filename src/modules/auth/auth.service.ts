@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { throwFail } from '../../utils';
+import { throwFail, validateNumber, validatePassword } from '../../utils';
 import { UsersService } from '../users/users.service';
 import { SignDto } from './dto/auth.dto';
 
@@ -16,9 +16,11 @@ export class AuthService {
   }
 
   async sign(signDto: SignDto) {
-    const { username } = signDto;
+    const { username, password } = signDto;
     const user = await this.usersService.findOne(username);
     if (user) throwFail('用户已存在');
+    if (!validateNumber(username)) throwFail('账号必须为数字');
+    if (!validatePassword(password)) throwFail('密码必须为8-20位');
     const { id } = await this.usersService.create(signDto);
     return { token: this.jwtService.sign({ username, id }) };
   }
