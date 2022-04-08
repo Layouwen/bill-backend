@@ -1,5 +1,6 @@
 FROM node:16-alpine
 RUN npm config set registry https://registry.npm.taobao.org && \
+    npm i -g npm && \
     npm install -g pnpm pm2 yarn
 ADD ./bill-backend /app/backend
 ADD ./bill-frontend /app/frontend
