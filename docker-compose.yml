@@ -5,5 +5,8 @@ services:
     build:
       context: ../
       dockerfile: ./bill-backend/Dockerfile
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
     ports:
       - "3001:3001"
