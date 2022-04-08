@@ -22,8 +22,8 @@ export class RecordController {
   @Get()
   @ApiOperation({ summary: '获取记录' })
   async getRecordList(@Request() req, @Body() body: SearchRecordListDto) {
-    const [records] = await this.recordService.findAll(req.user.id, body);
-    return success(records);
+    const data = await this.recordService.findAll(req.user.id, body);
+    return success(data);
   }
 
   @Post()

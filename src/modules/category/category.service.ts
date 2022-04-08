@@ -39,4 +39,13 @@ export class CategoryService {
     category.icon = url;
     return await this.categoryRepository.save(category);
   }
+
+  async findAll(userId: number) {
+    const user = await this.userRepository.findOne(userId);
+    const [data, count] = await this.categoryRepository.findAndCount({
+      where: { user },
+      order: { id: 'DESC' },
+    });
+    return { data, count };
+  }
 }

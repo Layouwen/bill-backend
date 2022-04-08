@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   Post,
   UploadedFile,
+  Get,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -26,6 +27,13 @@ import { AddCategoryDto } from './dto/category.dto';
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
+
+  @Get()
+  @ApiOperation({ summary: '获取分类列表' })
+  async getCategoryList(@Request() req) {
+    const data = await this.categoryService.findAll(req.user.id);
+    return success(data);
+  }
 
   @Post()
   @ApiConsumes('multipart/form-data')

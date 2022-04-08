@@ -2,7 +2,7 @@ import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
-import { created, success } from '../../utils';
+import { created } from '../../utils';
 import { Category } from '../category/entity/category.entity';
 import { User } from '../users/entity/user.entity';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
@@ -23,6 +23,7 @@ export class RecordService {
     const options = {
       where: { user: userId },
       order: { time: 'DEST' },
+      relations: ['category'],
     } as ObjectLiteral;
     if (params) {
       const { startDate, endDate } = params;
@@ -39,7 +40,8 @@ export class RecordService {
         );
       }
     }
-    return await this.recordRepository.findAndCount(options);
+    const [data, count] = await this.recordRepository.findAndCount(options);
+    return { data, count };
   }
 
   async create(userId: number, createRecordDto: CreateRecordDto) {
