@@ -24,6 +24,7 @@ export class FollowController {
   async getFollowByUserId(@Param('id') id: string) {
     const follows = await this.followService.findAllToTopicUserInfo(
       parseInt(id),
+      false
     );
     return success(follows);
   }
