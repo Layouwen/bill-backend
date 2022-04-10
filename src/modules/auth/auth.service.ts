@@ -17,7 +17,7 @@ export class AuthService {
 
   async sign(signDto: SignDto) {
     const { username, password } = signDto;
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findOneByName(username);
     if (user) throwFail('用户已存在');
     if (!validateNumber(username)) throwFail('账号必须为数字');
     if (!validatePassword(password)) throwFail('密码必须为8-20位');
@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findOneByName(username);
     if (user && user.password === password) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;

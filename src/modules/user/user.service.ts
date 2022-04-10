@@ -12,7 +12,11 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findOne(username: string) {
+  findOne(userId: number) {
+    return this.usersRepository.findOne({ where: { id: userId } });
+  }
+
+  findOneByName(username: string) {
     return this.usersRepository.findOne({ where: { username } });
   }
 

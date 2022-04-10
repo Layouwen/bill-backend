@@ -16,6 +16,7 @@ import { IRequest } from '../../../custom';
 import { created, fail, success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from '../check-in/check-in.service';
+import { FollowService } from '../follow/follow.service';
 import { UserService } from '../user/user.service';
 import {
   AddCommentDto,
@@ -31,18 +32,27 @@ export class TopicController {
     private readonly topicService: TopicService,
     private readonly usersService: UserService,
     private readonly checkInService: CheckInService,
+    private readonly followService: FollowService,
   ) {}
 
   @Get('/user/:id')
   @ApiOperation({ summary: '获取与帖子相关的用户信息' })
-  async getTopicRelatedUserInfo(@Param('id') id: string) {
+  async getTopicRelatedUserInfo(@Param('id') id: string, @Req() req: IRequest) {
     const userInfo = await this.usersService.getUserInfo(parseInt(id));
     if (!userInfo) {
       return fail('用户不存在');
     }
     const checkInfo = await this.checkInService.getCheckInInfo(parseInt(id));
     const topics = await this.topicService.getTopics(parseInt(id), true);
-    return success({ userInfo, checkInfo, topics });
+    const followList = await this.followService.findAllToTopicUserInfo(parseInt(id));
+    const data = { userInfo, checkInfo, topics, ...followList } as any;
+    if (req?.info?.id) {
+      data.isFollow = await this.followService.isFollow(
+        req.info.id,
+        parseInt(id),
+      );
+    }
+    return success(data);
   }
 
   @Get('/:id')
