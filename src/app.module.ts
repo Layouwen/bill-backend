@@ -7,7 +7,7 @@ import { UserInitMiddleware } from './middleware/UserInitMiddleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
 import { TopicModule } from './modules/topic/topic.module';
-import { UsersModule } from './modules/users/users.module';
+import { UserModule } from './modules/user/user.module';
 import { RecordModule } from './modules/record/record.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CheckInModule } from './modules/check-in/check-in.module';
@@ -24,7 +24,7 @@ import { CheckInModule } from './modules/check-in/check-in.module';
       rootPath: __dirname + '/../../frontend/dist',
     }),
     AuthModule,
-    UsersModule,
+    UserModule,
     RecordModule,
     CategoryModule,
     TopicModule,

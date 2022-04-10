@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignDto } from '../auth/dto/auth.dto';
-import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/users.dto';
+import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
 import { User } from './entity/user.entity';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,

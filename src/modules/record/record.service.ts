@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
 import { created } from '../../utils';
 import { Category } from '../category/entity/category.entity';
-import { User } from '../users/entity/user.entity';
+import { User } from '../user/entity/user.entity';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
 import { Record } from './entity/record.entity';
 

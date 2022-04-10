@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { getFileHash, qiniuOss } from '../../utils';
-import { User } from '../users/entity/user.entity';
+import { User } from '../user/entity/user.entity';
 import { AddCategoryDto } from './dto/category.dto';
 import { Category } from './entity/category.entity';
 

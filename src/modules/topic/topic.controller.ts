@@ -16,7 +16,7 @@ import { IRequest } from '../../../custom';
 import { created, fail, success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from '../check-in/check-in.service';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import {
   AddCommentDto,
   CreateTopicDto,
@@ -29,7 +29,7 @@ import { TopicService } from './topic.service';
 export class TopicController {
   constructor(
     private readonly topicService: TopicService,
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
     private readonly checkInService: CheckInService,
   ) {}
 

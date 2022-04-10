@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { Between, Repository } from 'typeorm';
 import { getStartAndEndTime } from '../../utils/time';
-import { User } from '../users/entity/user.entity';
+import { User } from '../user/entity/user.entity';
 import { CheckIn } from './entities/check-in.entity';
 
 @Injectable()

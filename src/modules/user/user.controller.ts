@@ -4,16 +4,16 @@ import { success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from '../check-in/check-in.service';
 import { RecordService } from '../record/record.service';
-import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/users.dto';
-import { UsersService } from './users.service';
+import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 @ApiTags('user')
 @ApiBearerAuth('Token')
 @UseGuards(JwtAuthGuard)
-export class UsersController {
+export class UserController {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
     private readonly checkInService: CheckInService,
     private readonly recordService: RecordService,
   ) {}

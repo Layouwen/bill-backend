@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Category } from '../../category/entity/category.entity';
-import { User } from '../../users/entity/user.entity';
+import { User } from '../../user/entity/user.entity';
 
 @Entity()
 export class Record {
