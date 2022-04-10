@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { Between, Repository } from 'typeorm';
 import { getStartAndEndTime } from '../../utils/time';
+import { RecordService } from '../record/record.service';
 import { User } from '../user/entity/user.entity';
 import { CheckIn } from './entities/check-in.entity';
 
@@ -13,6 +14,7 @@ export class CheckInService {
     private checkInRepository: Repository<CheckIn>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private recordService: RecordService,
   ) {}
 
   async create(userId: number) {
@@ -57,10 +59,11 @@ export class CheckInService {
       where: { user: userId },
       order: { checkInTime: 'DESC' },
     });
-
+    const { count } = await this.recordService.findAll(userId);
     return {
       checkInKeep: getContinueDay(list),
       checkInAll,
+      recordCount: count || 0,
     };
   }
 }

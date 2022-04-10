@@ -25,13 +25,13 @@ export class UserController {
     const checkIn = !!(await this.checkInService.hasCheckIn(req.user.id));
     const { checkInAll, checkInKeep } =
       await this.checkInService.getCheckInInfo(req.user.id);
-    const records = await this.recordService.findAll(req.user.id);
+    const { count } = await this.recordService.findAll(req.user.id);
     return success({
       ...userInfo,
       checkIn,
       checkInAll,
       checkInKeep,
-      recordCount: records[1],
+      recordCount: count || 0,
     });
   }
 
