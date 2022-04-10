@@ -58,15 +58,19 @@ export class TopicService {
     return result;
   }
 
-  async getTopics(getTopicsDto: GetTopicsDto, userId: number) {
-    const { recommend } = getTopicsDto;
-    const topics = await this.topicRepository
+  async getTopics(userId?: number, isOwn = false, recommend = false) {
+    const topicRepositoryFind = this.topicRepository
       .createQueryBuilder('topic')
       .leftJoin('topic.user', 'user')
       .addSelect(['user.id', 'user.name', 'user.avatar'])
-      .where('topic.recommend = :recommend', { recommend })
-      .orderBy('topic.createdAt', 'DESC')
-      .getMany();
+      .orderBy('topic.createdAt', 'DESC');
+    if (recommend) {
+      topicRepositoryFind.where('topic.recommend = :recommend', { recommend });
+    }
+    if (isOwn && userId) {
+      topicRepositoryFind.andWhere('topic.userId = :userId', { userId });
+    }
+    const topics = await topicRepositoryFind.getMany();
 
     const res = [];
     for (const topic of topics) {

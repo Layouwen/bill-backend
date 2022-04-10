@@ -13,8 +13,10 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IRequest } from '../../../custom';
-import { created, success } from '../../utils';
+import { created, fail, success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CheckInService } from '../check-in/check-in.service';
+import { UsersService } from '../users/users.service';
 import {
   AddCommentDto,
   CreateTopicDto,
@@ -25,7 +27,23 @@ import { TopicService } from './topic.service';
 @ApiTags('topic')
 @Controller('topic')
 export class TopicController {
-  constructor(private readonly topicService: TopicService) {}
+  constructor(
+    private readonly topicService: TopicService,
+    private readonly usersService: UsersService,
+    private readonly checkInService: CheckInService,
+  ) {}
+
+  @Get('/user/:id')
+  @ApiOperation({ summary: '获取与帖子相关的用户信息' })
+  async getTopicRelatedUserInfo(@Param('id') id: string) {
+    const userInfo = await this.usersService.getUserInfo(parseInt(id));
+    if (!userInfo) {
+      return fail('用户不存在');
+    }
+    const checkInfo = await this.checkInService.getCheckInInfo(parseInt(id));
+    const topics = await this.topicService.getTopics(parseInt(id), true);
+    return success({ userInfo, checkInfo, topics });
+  }
 
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
@@ -48,8 +66,9 @@ export class TopicController {
     @Req() req,
   ) {
     const topics = await this.topicService.getTopics(
-      { recommend },
       req.info?.id,
+      false,
+      recommend,
     );
     return success(topics);
   }
