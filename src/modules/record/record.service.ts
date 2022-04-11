@@ -2,7 +2,7 @@ import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
-import { created } from '../../utils';
+import { created, math } from '../../utils';
 import { Category } from '../category/entity/category.entity';
 import { User } from '../user/entity/user.entity';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
@@ -74,12 +74,12 @@ export class RecordService {
   getIncome(data: Record[]) {
     return data
       .filter((i) => i.type === MoneyType.INCOME)
-      .reduce((a, b) => a + parseFloat(b.amount), 0);
+      .reduce((a, b) => math.add(a, parseFloat(b.amount)).toNumber(), 0);
   }
 
   getExpend(data: Record[]) {
     return data
       .filter((i) => i.type === MoneyType.EXPEND)
-      .reduce((a, b) => a + parseFloat(b.amount), 0);
+      .reduce((a, b) => math.add(a, parseFloat(b.amount)).toNumber(), 0);
   }
 }

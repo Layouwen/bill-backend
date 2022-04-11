@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 
+export { default as math } from './math';
 export * from './response';
 export * from './upload';
 export * from './validation';
