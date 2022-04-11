@@ -8,6 +8,11 @@ import { User } from '../user/entity/user.entity';
 import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
 import { Record } from './entity/record.entity';
 
+enum MoneyType {
+  INCOME = '+',
+  EXPEND = '-',
+}
+
 @Injectable()
 export class RecordService {
   constructor(
@@ -40,8 +45,11 @@ export class RecordService {
         );
       }
     }
-    const [data, count] = await this.recordRepository.findAndCount(options);
-    return { data, count };
+    const res = await this.recordRepository.findAndCount(options);
+    const [data, count] = res;
+    const income = this.getIncome(data);
+    const expend = this.getExpend(data);
+    return { data, count, income, expend };
   }
 
   async create(userId: number, createRecordDto: CreateRecordDto) {
@@ -61,5 +69,17 @@ export class RecordService {
     } catch (e) {
       return fail('创建失败');
     }
+  }
+
+  getIncome(data: Record[]) {
+    return data
+      .filter((i) => i.type === MoneyType.INCOME)
+      .reduce((a, b) => a + parseFloat(b.amount), 0);
+  }
+
+  getExpend(data: Record[]) {
+    return data
+      .filter((i) => i.type === MoneyType.EXPEND)
+      .reduce((a, b) => a + parseFloat(b.amount), 0);
   }
 }
