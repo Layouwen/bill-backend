@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { throwFail } from '../../utils';
+import { TopicService } from '../topic/topic.service';
 import { UserService } from '../user/user.service';
 import { Follow } from './entities/Follow.entity';
 
@@ -11,11 +12,13 @@ export class FollowService {
     @InjectRepository(Follow)
     private readonly followRepository: Repository<Follow>,
     private readonly userService: UserService,
+    @Inject(forwardRef(() => TopicService))
+    private readonly topicService: TopicService,
   ) {}
 
   async findAllToTopicUserInfo(id: number, onlyCount = true) {
-    const { follow, count: followCount } = await this.getFollowList(id);
-    const { fans, count: fansCount } = await this.getFansList(id);
+    const { data: follow, count: followCount } = await this.getFollowList(id);
+    const { data: fans, count: fansCount } = await this.getFansList(id);
     if (onlyCount) {
       return {
         follow: followCount,
@@ -53,7 +56,6 @@ export class FollowService {
     const follow = await this.followRepository.findOne({
       where: { user: userId, follow: followId },
     });
-    console.log(userId, followId);
     if (!follow) {
       throwFail('无此关注');
     }
@@ -70,19 +72,51 @@ export class FollowService {
     return !!res;
   }
 
-  async getFollowList(followId: number) {
-    const [follow, count] = await this.followRepository.findAndCount({
+  async getFollowList(followId: number, deep = true, userId?: number) {
+    const [follows, count] = await this.followRepository.findAndCount({
       where: { user: followId },
-      relations: ['user'],
-    });
-    return { follow, count };
-  }
-
-  async getFansList(userId: number) {
-    const [fans, count] = await this.followRepository.findAndCount({
-      where: { follow: userId },
       relations: ['follow'],
     });
-    return { fans, count };
+    const data = [];
+    if (deep && follows.length) {
+      for (let i = 0; i < follows.length; i++) {
+        const result = follows[i] as any;
+        const { avatar, name, id } = follows[i].follow;
+        result.avatar = avatar;
+        result.name = name;
+        result.userId = id;
+        result.isFollow = await this.isFollow(userId, id);
+        delete result.follow;
+        result.follow = (await this.getFollowList(id, false)).count;
+        result.fans = (await this.getFollowList(id, false)).count;
+        result.topics = (await this.topicService.getTopics(id, true)).length;
+        data[i] = result;
+      }
+    }
+    return { data, count };
+  }
+
+  async getFansList(viewUserId: number, deep = true, userId?: number) {
+    const [fans, count] = await this.followRepository.findAndCount({
+      where: { follow: viewUserId },
+      relations: ['user'],
+    });
+    const data = [];
+    if (deep && fans.length) {
+      for (let i = 0; i < fans.length; i++) {
+        const result = fans[i] as any;
+        const { avatar, name, id } = fans[i].user;
+        result.avatar = avatar;
+        result.name = name;
+        result.userId = id;
+        result.follow = (await this.getFollowList(id, false)).count;
+        result.isFollow = await this.isFollow(userId, id);
+        delete result.user;
+        result.fans = (await this.getFollowList(id, false)).count;
+        result.topics = (await this.topicService.getTopics(id, true)).length;
+        data[i] = result;
+      }
+    }
+    return { data, count };
   }
 }

@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IRequest } from '../../../custom';
 import { success } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { FollowListType, getFollowListDto } from './follow.dto';
 import { FollowService } from './follow.service';
 
 @ApiTags('follow')
@@ -21,11 +23,30 @@ export class FollowController {
 
   @ApiOperation({ summary: '根据用户获取关注列表' })
   @Get(':id')
-  async getFollowByUserId(@Param('id') id: string) {
-    const follows = await this.followService.findAllToTopicUserInfo(
-      parseInt(id),
-      false,
-    );
+  async getFollowByUserId(
+    @Param('id') id: string,
+    @Query() query: getFollowListDto,
+    @Req() req: IRequest,
+  ) {
+    let follows;
+    if (!query.type) {
+      follows = await this.followService.findAllToTopicUserInfo(
+        parseInt(id),
+        false,
+      );
+    } else if (query.type === FollowListType.FOLLOW) {
+      follows = await this.followService.getFollowList(
+        parseInt(id),
+        true,
+        req.info?.id,
+      );
+    } else {
+      follows = await this.followService.getFansList(
+        parseInt(id),
+        true,
+        req.info?.id,
+      );
+    }
     return success(follows);
   }
 

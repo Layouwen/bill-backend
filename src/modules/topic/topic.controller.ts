@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  forwardRef,
   Get,
   HttpException,
+  Inject,
   Param,
   ParseBoolPipe,
   Post,
@@ -32,6 +34,7 @@ export class TopicController {
     private readonly topicService: TopicService,
     private readonly usersService: UserService,
     private readonly checkInService: CheckInService,
+    @Inject(forwardRef(() => FollowService))
     private readonly followService: FollowService,
   ) {}
 
@@ -44,7 +47,9 @@ export class TopicController {
     }
     const checkInfo = await this.checkInService.getCheckInInfo(parseInt(id));
     const topics = await this.topicService.getTopics(parseInt(id), true);
-    const followList = await this.followService.findAllToTopicUserInfo(parseInt(id));
+    const followList = await this.followService.findAllToTopicUserInfo(
+      parseInt(id),
+    );
     const data = { userInfo, checkInfo, topics, ...followList } as any;
     if (req?.info?.id) {
       data.isFollow = await this.followService.isFollow(

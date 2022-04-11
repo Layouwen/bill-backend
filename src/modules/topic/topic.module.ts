@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CheckInModule } from '../check-in/check-in.module';
 import { FollowModule } from '../follow/follow.module';
@@ -14,7 +14,7 @@ import { TopicService } from './topic.service';
     TypeOrmModule.forFeature([Topic, TopicLike, User, Comment]),
     UserModule,
     CheckInModule,
-    FollowModule,
+    forwardRef(() => FollowModule),
   ],
   providers: [TopicService],
   controllers: [TopicController],
