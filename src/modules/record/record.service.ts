@@ -2,10 +2,14 @@ import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
-import { created, math } from '../../utils';
+import { created, math, throwFail } from '../../utils';
 import { Category } from '../category/entity/category.entity';
 import { User } from '../user/entity/user.entity';
-import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
+import {
+  CreateRecordDto,
+  SearchRecordListDto,
+  UpdateRecordDto,
+} from './dto/record.dto';
 import { Record } from './entity/record.entity';
 
 enum MoneyType {
@@ -69,6 +73,15 @@ export class RecordService {
     } catch (e) {
       return fail('创建失败');
     }
+  }
+
+  async update(id: number, updateRecordDto: UpdateRecordDto) {
+    const { categoryId, ...params } = updateRecordDto;
+    const record = await this.recordRepository.findOne(id);
+    if (!record) throwFail('记录不存在');
+    const category = await this.categoryRepository.findOne(categoryId);
+    if (!category) throwFail('分类不存在');
+    return this.recordRepository.save({ ...record, ...params, category });
   }
 
   getIncome(data: Record[]) {

@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import {
   IsDateString,
   IsEnum,
@@ -39,6 +39,8 @@ export class CreateRecordDto {
   @ApiProperty({ example: '1000', description: '金额' })
   amount: string;
 }
+
+export class UpdateRecordDto extends PartialType(CreateRecordDto) {}
 
 export class SearchRecordListDto {
   @IsString()

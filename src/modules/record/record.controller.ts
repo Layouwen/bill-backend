@@ -6,11 +6,17 @@ import {
   Post,
   Body,
   Query,
+  Put,
+  Param,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { success } from '../../utils';
+import { success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateRecordDto, SearchRecordListDto } from './dto/record.dto';
+import {
+  CreateRecordDto,
+  SearchRecordListDto,
+  UpdateRecordDto,
+} from './dto/record.dto';
 import { RecordService } from './record.service';
 
 @ApiTags('record')
@@ -31,5 +37,15 @@ export class RecordController {
   @ApiOperation({ summary: '添加记录' })
   async addRecord(@Request() req, @Body() body: CreateRecordDto) {
     return await this.recordService.create(req.user.id, body);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: '更新记录' })
+  async updateRecord(
+    @Param('id') id: string,
+    @Body() updateRecordDto: UpdateRecordDto,
+  ) {
+    await this.recordService.update(parseInt(id), updateRecordDto);
+    return updated();
   }
 }
