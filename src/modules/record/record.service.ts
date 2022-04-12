@@ -84,6 +84,10 @@ export class RecordService {
     return this.recordRepository.save({ ...record, ...params, category });
   }
 
+  delete(id: number) {
+    return this.recordRepository.delete(id);
+  }
+
   getIncome(data: Record[]) {
     return data
       .filter((i) => i.type === MoneyType.INCOME)

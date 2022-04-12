@@ -8,9 +8,10 @@ import {
   Query,
   Put,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { success, updated } from '../../utils';
+import { deleted, success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   CreateRecordDto,
@@ -47,5 +48,12 @@ export class RecordController {
   ) {
     await this.recordService.update(parseInt(id), updateRecordDto);
     return updated();
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: '删除记录' })
+  async deleteRecord(@Param('id') id: string) {
+    await this.recordService.delete(parseInt(id));
+    return deleted();
   }
 }
