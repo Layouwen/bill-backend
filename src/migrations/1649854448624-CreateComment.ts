@@ -45,7 +45,8 @@ export class CreateComment1649854448624 implements MigrationInterface {
           {
             name: 'replyToId',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
+            default: null,
           },
         ],
       }),
