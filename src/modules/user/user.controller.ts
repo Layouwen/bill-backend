@@ -21,16 +21,27 @@ export class UserController {
   @Get('userInfo')
   @ApiOperation({ summary: '获取用户信息' })
   async getUserInfo(@Req() req) {
+    // base info
     const userInfo = await this.usersService.getUserInfo(req.user.id);
+
+    // check in info
     const checkIn = !!(await this.checkInService.hasCheckIn(req.user.id));
+
+    // check day count
     const { checkInAll, checkInKeep } =
       await this.checkInService.getCheckInInfo(req.user.id);
+
+    // record quantity
     const { count } = await this.recordService.findAll(req.user.id);
+
+    // bill record
+    const billRecord = await this.recordService.getBillRecord(req.user.id);
     return success({
       ...userInfo,
       checkIn,
       checkInAll,
       checkInKeep,
+      billRecord,
       recordCount: count || 0,
     });
   }

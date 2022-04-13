@@ -99,4 +99,33 @@ export class RecordService {
       .filter((i) => i.type === MoneyType.EXPEND)
       .reduce((a, b) => math.add(a, parseFloat(b.amount)).toNumber(), 0);
   }
+
+  async getBillRecord(id: number) {
+    const { monthStart } = getTimestamp();
+    const { month } = getNowTime();
+    const { expend, income } = await this.findAll(id, {
+      startDate: monthStart,
+    });
+    const surplus = math.subtract(income, expend).toNumber();
+    return {
+      month,
+      expend,
+      income,
+      surplus,
+    };
+  }
 }
+
+const getNowTime = () => {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  return {
+    month,
+  };
+};
+
+const getTimestamp = () => {
+  return {
+    monthStart: dayjs(new Date()).startOf('month').format(),
+  };
+};
