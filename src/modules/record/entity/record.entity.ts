@@ -14,13 +14,13 @@ export class Record {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column()
   remark: string;
 
   @Column({ type: 'timestamp' })
   time: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, enum: ['-', '+'] })
   type: string;
 
   @Column({ nullable: false })

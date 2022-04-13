@@ -21,9 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "m:create": "typeorm migration:create",
     "m:run": "typeorm migration:run",
-    "m:revert": "typeorm migration:revert",
-    "m:s:create": "typeorm migration:create -c 'seed' -n",
-    "m:s:run": "typeorm migration:run -c 'seed'"
+    "m:revert": "typeorm migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
