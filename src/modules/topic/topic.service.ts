@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
+import { tinyInt } from '../../utils';
 import { User } from '../user/entity/user.entity';
+import { GetTopicListQueryDto } from './dto/get-topic-list-query.dto';
 import { AddCommentDto, CreateTopicDto } from './dto/topic.dto';
 import { Comment } from './entty/comment.entity';
 import { Topic, TopicLike } from './entty/topic.entity';
@@ -58,15 +60,26 @@ export class TopicService {
     return result;
   }
 
-  async getTopics(userId?: number, isOwn = false, recommend = false) {
+  async getTopics(
+    userId?: number,
+    isOwn = false,
+    params?: GetTopicListQueryDto,
+  ) {
+    const { recommend = false, page = 1, pageSize = 1 } = params;
     const topicRepositoryFind = this.topicRepository
       .createQueryBuilder('topic')
       .leftJoin('topic.user', 'user')
       .addSelect(['user.id', 'user.name', 'user.avatar'])
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
       .orderBy('topic.createdAt', 'DESC');
+
     if (recommend) {
-      topicRepositoryFind.where('topic.recommend = :recommend', { recommend });
+      topicRepositoryFind.where('topic.recommend = :recommend', {
+        recommend: tinyInt(recommend),
+      });
     }
+
     if (isOwn && userId) {
       topicRepositoryFind.andWhere('topic.userId = :userId', { userId });
     }

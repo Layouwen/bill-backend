@@ -6,7 +6,6 @@ import {
   HttpException,
   Inject,
   Param,
-  ParseBoolPipe,
   Post,
   Put,
   Query,
@@ -20,6 +19,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from '../check-in/check-in.service';
 import { FollowService } from '../follow/follow.service';
 import { UserService } from '../user/user.service';
+import { GetTopicListQueryDto } from './dto/get-topic-list-query.dto';
 import {
   AddCommentDto,
   CreateTopicDto,
@@ -76,14 +76,11 @@ export class TopicController {
 
   @Get()
   @ApiOperation({ summary: '获取文章列表' })
-  async getTopics(
-    @Query('recommend', ParseBoolPipe) recommend: boolean,
-    @Req() req,
-  ) {
+  async getTopics(@Req() req, @Query() query: GetTopicListQueryDto) {
     const topics = await this.topicService.getTopics(
       req.info?.id,
       false,
-      recommend,
+      query,
     );
     return success(topics);
   }

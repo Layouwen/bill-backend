@@ -4,6 +4,7 @@ export { default as math } from './math';
 export * from './response';
 export * from './upload';
 export * from './validation';
+export * from './queryBuilderHelper';
 
 export const getFileHash = (file) => {
   const hashSum = crypto.createHash('sha256');
