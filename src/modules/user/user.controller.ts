@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { success, updated } from '../../utils';
+import { success, updated, fail } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CheckInService } from '../check-in/check-in.service';
 import { RecordService } from '../record/record.service';
