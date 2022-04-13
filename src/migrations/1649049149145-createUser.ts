@@ -13,21 +13,30 @@ export class CreateUser1649049149145 implements MigrationInterface {
             isGenerated: true,
             generationStrategy: 'increment',
           },
-          {
-            name: 'avatar',
-            type: 'varchar',
-          },
-          {
-            name: 'name',
-            type: 'varchar',
-          },
+          { name: 'name', type: 'varchar', isNullable: false },
           {
             name: 'username',
             type: 'varchar',
+            isUnique: true,
+            isNullable: false,
           },
           {
             name: 'password',
             type: 'varchar',
+            isNullable: false,
+          },
+          {
+            name: 'isActive',
+            type: 'tinyint',
+            isNullable: false,
+            default: 1,
+          },
+          {
+            name: 'avatar',
+            type: 'varchar',
+            isNullable: false,
+            default:
+              "'https:,//bill-rearend.oss-cn-guangzhou.aliyuncs.com/static/defulatAvatar.jpg'",
           },
           {
             name: 'createdAt',
