@@ -36,7 +36,7 @@ export class CreateUser1649049149145 implements MigrationInterface {
             type: 'varchar',
             isNullable: false,
             default:
-              "'https:,//bill-rearend.oss-cn-guangzhou.aliyuncs.com/static/defulatAvatar.jpg'",
+              "'https://bill-rearend.oss-cn-guangzhou.aliyuncs.com/static/defulatAvatar.jpg'",
           },
           {
             name: 'createdAt',
