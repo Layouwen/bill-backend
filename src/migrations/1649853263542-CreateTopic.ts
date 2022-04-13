@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createComment1649854448624 implements MigrationInterface {
+export class CreateTopic1649853263542 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'comment',
+        name: 'topic',
         columns: [
           {
             name: 'id',
@@ -14,34 +14,34 @@ export class createComment1649854448624 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'content',
-            type: 'varchar',
-            length: '255',
+            name: 'images',
+            type: 'json',
             isNullable: false,
+          },
+          {
+            name: 'content',
+            type: 'text',
+          },
+          {
+            name: 'recommend',
+            type: 'tinyint',
+            default: 0,
           },
           {
             name: 'createdAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
+            isNullable: false,
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
+            isNullable: false,
             onUpdate: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'userId',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'topicId',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'replyToId',
             type: 'int',
             isNullable: false,
           },
@@ -51,6 +51,6 @@ export class createComment1649854448624 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('comment');
+    await queryRunner.dropTable('topic');
   }
 }

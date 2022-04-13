@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class createRecord1649849373492 implements MigrationInterface {
+export class CreateComment1649854448624 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'record',
+        name: 'comment',
         columns: [
           {
             name: 'id',
@@ -14,35 +14,23 @@ export class createRecord1649849373492 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
-            name: 'remark',
+            name: 'content',
             type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'time',
-            type: 'timestamp',
-            isNullable: false,
-          },
-          {
-            name: 'type',
-            type: 'enum',
-            enum: ['-', '+'],
-            isNullable: false,
-          },
-          {
-            name: 'amount',
-            type: 'varchar',
+            length: '255',
             isNullable: false,
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'current_timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            isNullable: false,
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
-            default: 'current_timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP',
+            isNullable: false,
           },
           {
             name: 'userId',
@@ -50,7 +38,12 @@ export class createRecord1649849373492 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'categoryId',
+            name: 'topicId',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'replyToId',
             type: 'int',
             isNullable: false,
           },
@@ -60,6 +53,6 @@ export class createRecord1649849373492 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('record');
+    await queryRunner.dropTable('comment');
   }
 }

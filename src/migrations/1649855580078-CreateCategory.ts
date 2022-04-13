@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateUser1649049149145 implements MigrationInterface {
+export class CreateCategory1649855580078 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'user',
+        name: 'category',
         columns: [
           {
             name: 'id',
@@ -13,40 +13,33 @@ export class CreateUser1649049149145 implements MigrationInterface {
             isGenerated: true,
             generationStrategy: 'increment',
           },
-          { name: 'name', type: 'varchar', isNullable: false },
           {
-            name: 'username',
-            type: 'varchar',
-            isUnique: true,
-            isNullable: false,
-          },
-          {
-            name: 'password',
+            name: 'name',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'isActive',
-            type: 'tinyint',
-            isNullable: false,
-            default: 1,
-          },
-          {
-            name: 'avatar',
+            name: 'icon',
             type: 'varchar',
             isNullable: false,
-            default:
-              "'https:,//bill-rearend.oss-cn-guangzhou.aliyuncs.com/static/defulatAvatar.jpg'",
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'current_timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            isNullable: false,
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
-            default: 'current_timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP',
+            isNullable: false,
+          },
+          {
+            name: 'userId',
+            type: 'int',
+            isNullable: false,
           },
         ],
       }),
@@ -54,6 +47,6 @@ export class CreateUser1649049149145 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user');
+    await queryRunner.dropTable('category');
   }
 }
