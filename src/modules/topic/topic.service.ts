@@ -65,7 +65,7 @@ export class TopicService {
     isOwn = false,
     params?: GetTopicListQueryDto,
   ) {
-    const { recommend = false, page = 1, pageSize = 1 } = params;
+    const { recommend = false, page = 1, pageSize = 6 } = params;
     const topicRepositoryFind = this.topicRepository
       .createQueryBuilder('topic')
       .leftJoin('topic.user', 'user')
