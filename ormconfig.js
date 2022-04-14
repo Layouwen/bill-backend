@@ -3,7 +3,7 @@ const baseConfig = require('./ormconfig.base.js');
 
 module.exports = [
   {
-    ...baseConfig,
+    ...baseConfig.development,
     entities: ['dist/**/*.entity{.ts,.js}'],
     migrations: ['dist/migrations/*{.ts,.js}'],
     cli: {
@@ -11,11 +11,19 @@ module.exports = [
     },
   },
   {
-    ...baseConfig,
-    name: 'seed',
-    migrations: ['dist/migrations/seed/*{.ts,.js}'],
+    ...baseConfig.test,
+    name: 'test',
+    migrations: ['dist/migrations/*{.ts,.js}'],
     cli: {
-      migrationsDir: './src/migrations/seed',
+      migrationsDir: './src/migrations',
+    },
+  },
+  {
+    ...baseConfig.production,
+    name: 'prod',
+    migrations: ['dist/migrations/*{.ts,.js}'],
+    cli: {
+      migrationsDir: './src/migrations',
     },
   },
 ];
