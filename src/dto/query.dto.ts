@@ -6,7 +6,7 @@ export class QueryDto {
     description: '当前页数',
     example: 1,
   })
-  @IsNumberString({ message: '请输入数字' })
+  @IsNumberString({ message: '页数必须是数字' })
   @IsOptional()
   page?: number;
 
@@ -14,7 +14,7 @@ export class QueryDto {
     description: '每页数量',
     example: 10,
   })
-  @IsNumberString({ message: '请输入数字' })
+  @IsNumberString({ message: '每页数量必须是数字' })
   @IsOptional()
   pageSize?: number;
 }

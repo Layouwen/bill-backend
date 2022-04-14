@@ -31,7 +31,7 @@ export class RecordService {
   async findAll(userId: number, params?: SearchRecordListDto) {
     const options = {
       where: { user: userId },
-      order: { time: 'DEST' },
+      order: { time: 'DESC', createdAt: 'DESC' },
       relations: ['category'],
     } as ObjectLiteral;
     if (params) {
@@ -49,11 +49,19 @@ export class RecordService {
         );
       }
     }
-    const res = await this.recordRepository.findAndCount(options);
-    const [data, count] = res;
-    const income = this.getIncome(data);
-    const expend = this.getExpend(data);
-    return { data, count, income, expend };
+    const [totalData, total] = await this.recordRepository.findAndCount(
+      options,
+    );
+
+    const { page = 1, pageSize = 10 } = params;
+    const data = await this.recordRepository.find({
+      ...options,
+      take: pageSize,
+      skip: pageSize * (page - 1),
+    });
+    const income = this.getIncome(totalData);
+    const expend = this.getExpend(totalData);
+    return { data, total, income, expend };
   }
 
   async create(userId: number, createRecordDto: CreateRecordDto) {

@@ -1,7 +1,4 @@
-import {
-  ApiProperty,
-  ApiPropertyOptional,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsNotEmpty,
@@ -22,10 +19,6 @@ export class getTopicDetailDto {
   @IsNotEmpty()
   @IsNumberString()
   id: string;
-}
-
-export class GetTopicsDto {
-  recommend?: boolean;
 }
 
 export class AddCommentDto {

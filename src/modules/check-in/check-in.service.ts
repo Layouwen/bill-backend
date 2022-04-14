@@ -59,11 +59,11 @@ export class CheckInService {
       where: { user: userId },
       order: { checkInTime: 'DESC' },
     });
-    const { count } = await this.recordService.findAll(userId);
+    const { total } = await this.recordService.findAll(userId);
     return {
       checkInKeep: getContinueDay(list),
       checkInAll,
-      recordCount: count || 0,
+      recordCount: total || 0,
     };
   }
 }
