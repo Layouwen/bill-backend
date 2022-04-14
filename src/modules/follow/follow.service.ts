@@ -89,7 +89,9 @@ export class FollowService {
         delete result.follow;
         result.follow = (await this.getFollowList(id, false)).count;
         result.fans = (await this.getFollowList(id, false)).count;
-        result.topics = (await this.topicService.getTopics(id, true)).length;
+        result.topics = (
+          await this.topicService.getTopics(id, true)
+        ).topics.length;
         data[i] = result;
       }
     }
@@ -113,7 +115,9 @@ export class FollowService {
         result.isFollow = await this.isFollow(userId, id);
         delete result.user;
         result.fans = (await this.getFollowList(id, false)).count;
-        result.topics = (await this.topicService.getTopics(id, true)).length;
+        result.topics = (
+          await this.topicService.getTopics(id, true)
+        ).topics.length;
         data[i] = result;
       }
     }

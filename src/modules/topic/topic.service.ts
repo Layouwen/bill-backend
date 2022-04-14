@@ -63,7 +63,11 @@ export class TopicService {
   async getTopics(
     userId?: number,
     isOwn = false,
-    params?: GetTopicListQueryDto,
+    params: GetTopicListQueryDto = {
+      recommend: false,
+      page: 1,
+      pageSize: 6,
+    },
   ) {
     const { recommend = false, page = 1, pageSize = 6 } = params;
     const topicRepositoryFind = this.topicRepository
@@ -85,7 +89,7 @@ export class TopicService {
     }
     const topics = await topicRepositoryFind.getMany();
 
-    const res = [];
+    const result = [];
     for (const topic of topics) {
       const count = await this.getTopicInfoCount(topic.id);
       const i = {
@@ -97,9 +101,12 @@ export class TopicService {
         const likeStatus = await this.getUserIsLike(userId, topic.id);
         likeStatus && (i.isLike = true);
       }
-      res.push(i);
+      result.push(i);
     }
-    return res;
+    return {
+      topics: result,
+      total: await this.topicRepository.count(),
+    };
   }
 
   async toggleLike(userId, topicId) {
