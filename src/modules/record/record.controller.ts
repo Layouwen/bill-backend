@@ -11,7 +11,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { deleted, success, updated } from '../../utils';
+import { created, deleted, success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   CreateRecordDto,
@@ -29,31 +29,32 @@ export class RecordController {
 
   @Get()
   @ApiOperation({ summary: '获取记录' })
-  async getRecordList(@Request() req, @Query() query: SearchRecordListDto) {
-    const data = await this.recordService.findAll(req.user.id, query);
+  async findAll(@Request() req, @Query() query: SearchRecordListDto) {
+    const data = await this.recordService.findAll(+req.user.id, query);
     return success(data);
   }
 
   @Post()
   @ApiOperation({ summary: '添加记录' })
-  async addRecord(@Request() req, @Body() body: CreateRecordDto) {
-    return await this.recordService.create(req.user.id, body);
+  async create(@Request() req, @Body() body: CreateRecordDto) {
+    await this.recordService.create(+req.user.id, body);
+    return created();
   }
 
   @Put(':id')
   @ApiOperation({ summary: '更新记录' })
-  async updateRecord(
+  async update(
     @Param('id') id: string,
     @Body() updateRecordDto: UpdateRecordDto,
   ) {
-    await this.recordService.update(parseInt(id), updateRecordDto);
+    await this.recordService.update(+id, updateRecordDto);
     return updated();
   }
 
   @Delete(':id')
   @ApiOperation({ summary: '删除记录' })
-  async deleteRecord(@Param('id') id: string) {
-    await this.recordService.delete(parseInt(id));
+  async remove(@Param('id') id: string) {
+    await this.recordService.remove(+id);
     return deleted();
   }
 }
