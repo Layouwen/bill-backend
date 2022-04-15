@@ -28,9 +28,31 @@ export class SignDto {
     example: 'layouwen',
   })
   password: string;
+
+  @IsNotEmpty({ message: '请输入邮箱' })
+  @IsString({ message: '邮箱需为字符串' })
+  @ApiProperty({
+    description: '邮箱',
+    type: 'string',
+    example: 'layouwen@gmail.com',
+  })
+  email: string;
+
+  @IsNotEmpty({ message: '请输入验证码' })
+  @IsString({ message: '验证码需为字符串' })
+  @ApiProperty({
+    description: '邮箱验证码',
+    type: 'string',
+    example: '33nd',
+  })
+  emailCode: string;
 }
 
-export class LoginDto extends OmitType(SignDto, ['name']) {
+export class LoginDto extends OmitType(SignDto, [
+  'name',
+  'email',
+  'emailCode',
+]) {
   @ApiProperty({ description: '验证码', type: 'string', example: '923a' })
   @IsString({ message: '验证码需为字符串' })
   @IsNotEmpty({ message: '请输入验证码' })

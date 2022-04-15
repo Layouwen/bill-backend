@@ -16,11 +16,15 @@ export class AuthService {
   }
 
   async sign(signDto: SignDto) {
-    const { username, password } = signDto;
-    const user = await this.usersService.findOneByName(username);
-    if (user) throwFail('用户已存在');
+    const { username, password, email } = signDto;
+    const userEntry = await this.usersService.findOneByName(username);
+    if (userEntry) throwFail('账号已经注册');
+    const emailEntry = await this.usersService.findOneByEmail(email);
+    if (emailEntry) throwFail('邮箱已经注册');
+
     if (!validateNumber(username)) throwFail('账号必须为数字');
     if (!validatePassword(password)) throwFail('密码必须为8-20位');
+
     const { id } = await this.usersService.create(signDto);
     return { token: this.jwtService.sign({ username, id }) };
   }

@@ -29,9 +29,12 @@ export class AuthController {
   })
   @ApiBody({ type: LoginDto })
   async login(@Request() req, @Body() body: LoginDto, @Session() session) {
-    if (session.captcha !== body.captcha.toLowerCase())
-      return fail('验证码错误');
+    const captcha = body.captcha.toLowerCase();
+    if (!captcha || session.captcha !== captcha) return fail('验证码错误');
+
     const userInfo = await this.authService.login(req.user.id);
+    delete session.captcha;
+
     return success(
       {
         userInfo,
@@ -46,8 +49,19 @@ export class AuthController {
 
   @Post('sign')
   @ApiOperation({ summary: '注册' })
-  async sign(@Body() signDto: SignDto) {
+  async sign(@Body() signDto: SignDto, @Session() session) {
+    const emailCode = signDto.emailCode.toLowerCase();
+    if (
+      !emailCode ||
+      session.emailCode !== emailCode ||
+      signDto.email !== session.email
+    )
+      return fail('验证码错误');
+
     const data = await this.authService.sign(signDto);
+    delete signDto.email;
+    delete session.emailCode;
+
     return success(data, '注册成功');
   }
 }

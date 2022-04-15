@@ -30,6 +30,9 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column()
+  email: string;
+
   @Column({
     default:
       'https://bill-rearend.oss-cn-guangzhou.aliyuncs.com/static/defulatAvatar.jpg',

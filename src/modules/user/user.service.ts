@@ -12,12 +12,16 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findOne(userId: number) {
-    return this.usersRepository.findOne({ where: { id: userId } });
+  findOne(id: number) {
+    return this.usersRepository.findOne(id);
   }
 
   findOneByName(username: string) {
     return this.usersRepository.findOne({ where: { username } });
+  }
+
+  findOneByEmail(email: string) {
+    return this.usersRepository.findOne({ where: { email } });
   }
 
   create(user: SignDto): Promise<User> {
