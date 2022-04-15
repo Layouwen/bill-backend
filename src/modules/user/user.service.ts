@@ -12,8 +12,8 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findOne(id: number) {
-    return this.usersRepository.findOne(id);
+  findOne(userId: number) {
+    return this.usersRepository.findOne(userId);
   }
 
   findOneByName(username: string) {

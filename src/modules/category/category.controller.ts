@@ -8,6 +8,10 @@ import {
   Post,
   UploadedFile,
   Get,
+  Query,
+  Delete,
+  Param,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,10 +20,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { created, success } from '../../utils';
+import { QueryDto } from '../../dto/query.dto';
+import { created, deleted, success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoryService } from './category.service';
-import { AddCategoryDto } from './dto/category.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('Token')
@@ -30,8 +35,8 @@ export class CategoryController {
 
   @Get()
   @ApiOperation({ summary: '获取分类列表' })
-  async getCategoryList(@Request() req) {
-    const data = await this.categoryService.findAll(req.user.id);
+  async findAll(@Request() req, @Query() query: QueryDto) {
+    const data = await this.categoryService.findAll(req.user.id, query);
     return success(data);
   }
 
@@ -56,13 +61,28 @@ export class CategoryController {
   })
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: '添加类别' })
-  async upload(
+  async create(
     @Request() req,
-    @Body() body: AddCategoryDto,
+    @Body() body: CreateCategoryDto,
     @UploadedFile() files: Express.Multer.File,
   ) {
     const userId = req.user.id;
-    await this.categoryService.addCategory(userId, body, files);
+    await this.categoryService.create(userId, body, files);
     return created();
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: '删除类别' })
+  async remove(@Param('id') id: string) {
+    await this.categoryService.remove(id);
+    return deleted();
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: '更新类别' })
+  async update(@Param('id') id: string, @Body() body: UpdateCategoryDto) {
+    console.log(id, 'id');
+    await this.categoryService.update(id, body);
+    return updated();
   }
 }

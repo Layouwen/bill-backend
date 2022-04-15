@@ -28,10 +28,41 @@ export class RecordService {
     private categoryRepository: Repository<Category>,
   ) {}
 
+  async create(userId: number, createRecordDto: CreateRecordDto) {
+    const { time, remark, type, amount, categoryId } = createRecordDto;
+    const user = await this.userRepository.findOne(userId);
+    const category = await this.categoryRepository.findOne(categoryId);
+    const record = new Record();
+    record.user = user;
+    record.time = dayjs(time).format();
+    record.remark = remark;
+    record.type = type;
+    record.amount = amount;
+    record.category = category;
+    return await this.recordRepository.save(record);
+  }
+
+  remove(id: number) {
+    return this.recordRepository.delete(id);
+  }
+
+  async update(id: number, updateRecordDto: UpdateRecordDto) {
+    const { categoryId, ...params } = updateRecordDto;
+    const record = await this.findOne(id);
+    if (!record) throwFail('记录不存在');
+    const category = await this.categoryRepository.findOne(categoryId);
+    if (!category) throwFail('分类不存在');
+    return this.recordRepository.save({ ...record, ...params, category });
+  }
+
+  findOne(id: number) {
+    return this.recordRepository.findOne(id);
+  }
+
   async findAll(userId: number, params?: SearchRecordListDto) {
     const options = {
       where: { user: userId },
-      order: { time: 'DEST' },
+      order: { time: 'DESC', createdAt: 'DESC' },
       relations: ['category'],
     } as ObjectLiteral;
     if (params) {
@@ -49,43 +80,19 @@ export class RecordService {
         );
       }
     }
-    const res = await this.recordRepository.findAndCount(options);
-    const [data, count] = res;
-    const income = this.getIncome(data);
-    const expend = this.getExpend(data);
-    return { data, count, income, expend };
-  }
+    const [totalData, total] = await this.recordRepository.findAndCount(
+      options,
+    );
 
-  async create(userId: number, createRecordDto: CreateRecordDto) {
-    const { time, remark, type, amount, categoryId } = createRecordDto;
-    const user = await this.userRepository.findOne(userId);
-    const category = await this.categoryRepository.findOne(categoryId);
-    const record = new Record();
-    record.user = user;
-    record.time = dayjs(time).format();
-    record.remark = remark;
-    record.type = type;
-    record.amount = amount;
-    record.category = category;
-    try {
-      await this.recordRepository.save(record);
-      return created();
-    } catch (e) {
-      return fail('创建失败');
-    }
-  }
-
-  async update(id: number, updateRecordDto: UpdateRecordDto) {
-    const { categoryId, ...params } = updateRecordDto;
-    const record = await this.recordRepository.findOne(id);
-    if (!record) throwFail('记录不存在');
-    const category = await this.categoryRepository.findOne(categoryId);
-    if (!category) throwFail('分类不存在');
-    return this.recordRepository.save({ ...record, ...params, category });
-  }
-
-  delete(id: number) {
-    return this.recordRepository.delete(id);
+    const { page = 1, pageSize = 10 } = params;
+    const data = await this.recordRepository.find({
+      ...options,
+      take: pageSize,
+      skip: pageSize * (page - 1),
+    });
+    const income = this.getIncome(totalData);
+    const expend = this.getExpend(totalData);
+    return { data, total, income, expend };
   }
 
   getIncome(data: Record[]) {

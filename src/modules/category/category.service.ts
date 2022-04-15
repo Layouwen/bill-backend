@@ -1,9 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { getFileHash, qiniuOss } from '../../utils';
+import { ObjectLiteral, Repository } from 'typeorm';
+import { QueryDto } from '../../dto/query.dto';
+import { fail, getFileHash, qiniuOss } from '../../utils';
 import { User } from '../user/entity/user.entity';
-import { AddCategoryDto } from './dto/category.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 import { Category } from './entity/category.entity';
 
 @Injectable()
@@ -15,9 +16,9 @@ export class CategoryService {
     private userRepository: Repository<User>,
   ) {}
 
-  async addCategory(
+  async create(
     userId: number,
-    { name }: AddCategoryDto,
+    { name }: CreateCategoryDto,
     file: Express.Multer.File,
   ) {
     const user = await this.userRepository.findOne(userId);
@@ -25,7 +26,7 @@ export class CategoryService {
       user,
       name,
     });
-    if (findFromName) throw new HttpException({ message: '该分类已存在' }, 200);
+    if (findFromName) return fail('分类名称已存在');
 
     const { url } = await qiniuOss.uploadFile(
       file,
@@ -40,12 +41,34 @@ export class CategoryService {
     return await this.categoryRepository.save(category);
   }
 
-  async findAll(userId: number) {
-    const user = await this.userRepository.findOne(userId);
-    const [data, count] = await this.categoryRepository.findAndCount({
-      where: { user },
+  async remove(id: string) {
+    const category = await this.findOne(id);
+    if (!category) return fail('分类不存在');
+    return this.categoryRepository.remove(category);
+  }
+
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.findOne(id);
+    if (!category) return fail('分类不存在');
+    return this.categoryRepository.update(category, updateCategoryDto);
+  }
+
+  findOne(id: string) {
+    return this.categoryRepository.findOne(id);
+  }
+
+  async findAll(userId: number, params?: QueryDto) {
+    const options = {
+      where: { user: userId },
       order: { id: 'DESC' },
-    });
-    return { data, count };
+    } as ObjectLiteral;
+    const total = await this.categoryRepository.count(options);
+    if (params.page) {
+      const { page = 1, pageSize = 10 } = params;
+      options.skip = page;
+      options.take = pageSize;
+    }
+    const data = await this.categoryRepository.find(options);
+    return { data, total };
   }
 }

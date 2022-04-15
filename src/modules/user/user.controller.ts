@@ -32,7 +32,7 @@ export class UserController {
       await this.checkInService.getCheckInInfo(req.user.id);
 
     // record quantity
-    const { count } = await this.recordService.findAll(req.user.id);
+    const { total } = await this.recordService.findAll(req.user.id);
 
     // bill record
     const billRecord = await this.recordService.getBillRecord(req.user.id);
@@ -42,7 +42,7 @@ export class UserController {
       checkInAll,
       checkInKeep,
       billRecord,
-      recordCount: count || 0,
+      recordCount: total || 0,
     });
   }
 
