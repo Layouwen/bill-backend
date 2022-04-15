@@ -1,5 +1,6 @@
 export default {
   secret: '',
+  emailPassword: '',
   oss: {
     qiniu: {
       bucket: '',
