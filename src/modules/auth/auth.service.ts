@@ -11,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  login({ id }: { id: number }) {
+  login(id: number) {
     return this.usersService.getUserInfo(id);
   }
 

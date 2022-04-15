@@ -7,6 +7,7 @@ import { UserInitMiddleware } from './middleware/UserInitMiddleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
 import { FollowModule } from './modules/follow/follow.module';
+import { ToolsModule } from './modules/tools/tools.module';
 import { TopicModule } from './modules/topic/topic.module';
 import { UserModule } from './modules/user/user.module';
 import { RecordModule } from './modules/record/record.module';
@@ -31,6 +32,7 @@ import { CheckInModule } from './modules/check-in/check-in.module';
     TopicModule,
     CheckInModule,
     FollowModule,
+    ToolsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
