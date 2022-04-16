@@ -21,7 +21,7 @@ import { FollowService } from './follow.service';
 export class FollowController {
   constructor(private readonly followService: FollowService) {}
 
-  @ApiOperation({ summary: '根据用户获取关注列表' })
+  @ApiOperation({ summary: '根据用户获取关注或粉丝列表' })
   @Get(':id')
   async getFollowByUserId(
     @Param('id') id: string,

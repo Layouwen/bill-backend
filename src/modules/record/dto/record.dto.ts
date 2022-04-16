@@ -3,7 +3,7 @@ import {
   IsDateString,
   IsEnum,
   IsNotEmpty,
-  IsNumberString,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -16,7 +16,13 @@ export class CreateRecordDto {
   remark: string;
 
   @IsNotEmpty()
-  @IsNumberString({ message: '分类id为数字' })
+  @IsNumber(
+    {
+      allowInfinity: false,
+      allowNaN: false,
+    },
+    { message: '金额必须为数字' },
+  )
   @ApiProperty({ description: '分类id', example: '4' })
   categoryId: string;
 
