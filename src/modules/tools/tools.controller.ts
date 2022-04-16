@@ -2,6 +2,7 @@ import { Controller, Get, Query, Res, Session } from '@nestjs/common';
 import { ApiOperation, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { fail, success } from '../../utils';
+import { GetEmailCaptchaDto } from './dto/GetEmailCaptchaDto';
 import { ToolsService } from './tools.service';
 
 @ApiTags('tools')
@@ -24,7 +25,11 @@ export class ToolsController {
 
   @ApiOperation({ summary: '获取邮箱验证码' })
   @Get('email')
-  async emailCaptcha(@Session() session, @Query('email') email: string) {
+  async emailCaptcha(
+    @Session() session,
+    @Query() getEmailCaptchaDto: GetEmailCaptchaDto,
+  ) {
+    const { email } = getEmailCaptchaDto;
     const captcha = this.toolsService.svgCaptcha();
     const emailCode = captcha.text.toLowerCase();
     session.emailCode = emailCode;
