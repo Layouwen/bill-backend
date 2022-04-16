@@ -9,10 +9,18 @@ import {
 
 export class CreateTopicDto {
   @IsNotEmpty()
+  @ApiProperty({
+    description: '文章内容',
+    type: String,
+  })
   content: string;
 
   @IsArray()
-  images: string[];
+  @ApiPropertyOptional({
+    description: '文章图片',
+    type: Array,
+  })
+  images?: string[];
 }
 
 export class getTopicDetailDto {
