@@ -15,13 +15,13 @@ export class CreateRecordDto {
   @ApiProperty({ description: '备注', example: '买衣服' })
   remark: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: '分类不能为空' })
   @IsNumber(
     {
       allowInfinity: false,
       allowNaN: false,
     },
-    { message: '金额必须为数字' },
+    { message: '分类必须为数字' },
   )
   @ApiProperty({ description: '分类id', example: '4' })
   categoryId: string;
