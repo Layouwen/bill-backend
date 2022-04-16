@@ -65,8 +65,13 @@ export class RecordService {
       order: { time: 'DESC', createdAt: 'DESC' },
       relations: ['category'],
     } as ObjectLiteral;
+
+    const [totalData, total] = await this.recordRepository.findAndCount(
+      options,
+    );
+
     if (params) {
-      const { startDate, endDate } = params;
+      const { startDate, endDate, page = 1, pageSize = 10 } = params;
       if (startDate && endDate) {
         options.where.time = Between(
           dayjs(startDate).toDate(),
@@ -79,17 +84,11 @@ export class RecordService {
           dayjs(startDate).endOf('month').toDate(),
         );
       }
+      options.take = pageSize;
+      options.skip = pageSize * (page - 1);
     }
-    const [totalData, total] = await this.recordRepository.findAndCount(
-      options,
-    );
 
-    const { page = 1, pageSize = 10 } = params;
-    const data = await this.recordRepository.find({
-      ...options,
-      take: pageSize,
-      skip: pageSize * (page - 1),
-    });
+    const data = await this.recordRepository.find(options);
     const income = this.getIncome(totalData);
     const expend = this.getExpend(totalData);
     return { data, total, income, expend };
