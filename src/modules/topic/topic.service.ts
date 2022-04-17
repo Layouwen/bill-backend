@@ -157,7 +157,11 @@ export class TopicService {
     return { likeCount, commentCount, shareCount };
   }
 
-  async addComment(userId: number, topicId: string, addComment: AddCommentDto) {
+  async createComment(
+    userId: number,
+    topicId: string,
+    addComment: CreateCommentDto,
+  ) {
     const { content, replyTo } = addComment;
     const comment = new Comment();
     comment.user = await this.userRepository.findOne(userId);

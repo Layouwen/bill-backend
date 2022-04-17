@@ -54,9 +54,9 @@ export class TopicController {
   async addComment(
     @Req() req,
     @Param('id') id: string,
-    @Body() addComment: AddCommentDto,
+    @Body() addComment: CreateCommentDto,
   ) {
-    await this.topicService.addComment(req.user.id, id, addComment);
+    await this.topicService.createComment(req.user.id, id, addComment);
     return created('评论成功');
   }
 
@@ -112,7 +112,7 @@ export class TopicController {
   @ApiBearerAuth('Token')
   @ApiOperation({ summary: '创建文章' })
   async addTopic(@Req() req, @Body() addTopicDto: CreateTopicDto) {
-    await this.topicService.addTopic(req.user.id, addTopicDto);
+    await this.topicService.create(req.user.id, addTopicDto);
     return created();
   }
 
