@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { In, IsNull, Repository, Not } from 'typeorm';
 import { tinyInt } from '../../utils';
 import { User } from '../user/entity/user.entity';
 import { GetTopicListQueryDto } from './dto/get-topic-list-query.dto';
@@ -167,5 +167,31 @@ export class TopicService {
       comment.replyTo = await this.commentRepository.findOne(replyTo);
     }
     await this.commentRepository.save(comment);
+  }
+
+  async getComments(userId: string) {
+    // get all your own topic id
+    const topicIds = await this.topicRepository.find({
+      select: ['id'],
+      where: { user: userId },
+    });
+    // map to array
+    const topicIdsArr = topicIds.map((item) => item.id);
+    // find all comment
+    const data = await this.commentRepository
+      .createQueryBuilder('comment')
+      .leftJoin('comment.user', 'user')
+      .addSelect(['user.id', 'user.name', 'user.avatar'])
+      .leftJoin('comment.topic', 'topic')
+      .addSelect(['topic.id', 'topic.images'])
+      .where('comment.topicId IN (:...topicIdsArr)', { topicIdsArr })
+      .andWhere('user.id != :userId', { userId })
+      .orderBy('comment.createdAt', 'DESC')
+      .getMany();
+    // count own related comment
+    const total = await this.commentRepository.count({
+      where: { topic: In(topicIdsArr), user: Not(userId) },
+    });
+    return { data, total };
   }
 }

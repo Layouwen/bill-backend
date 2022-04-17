@@ -38,6 +38,28 @@ export class TopicController {
     private readonly followService: FollowService,
   ) {}
 
+  @Get(':id/comment')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Token')
+  @ApiOperation({ summary: '获取评论列表' })
+  async getComment(@Req() req, @Param('id') id: string) {
+    const res = await this.topicService.getComments(id);
+    return success(res);
+  }
+
+  @Post(':id/comment')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Token')
+  @ApiOperation({ summary: '评论文章' })
+  async addComment(
+    @Req() req,
+    @Param('id') id: string,
+    @Body() addComment: AddCommentDto,
+  ) {
+    await this.topicService.addComment(req.user.id, id, addComment);
+    return created('评论成功');
+  }
+
   @Get('/user/:id')
   @ApiOperation({ summary: '获取与帖子相关的用户信息' })
   async getTopicRelatedUserInfo(@Param('id') id: string, @Req() req: IRequest) {
@@ -83,19 +105,6 @@ export class TopicController {
       query,
     );
     return success(topics);
-  }
-
-  @Post(':id/comment')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('Token')
-  @ApiOperation({ summary: '评论文章' })
-  async addComment(
-    @Req() req,
-    @Param('id') id: string,
-    @Body() addComment: AddCommentDto,
-  ) {
-    await this.topicService.addComment(req.user.id, id, addComment);
-    return success('评论成功');
   }
 
   @Post()
