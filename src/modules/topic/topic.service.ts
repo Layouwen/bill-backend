@@ -4,7 +4,7 @@ import { In, IsNull, Repository, Not } from 'typeorm';
 import { tinyInt } from '../../utils';
 import { User } from '../user/entity/user.entity';
 import { GetTopicListQueryDto } from './dto/get-topic-list-query.dto';
-import { AddCommentDto, CreateTopicDto } from './dto/topic.dto';
+import { CreateCommentDto, CreateTopicDto } from './dto/topic.dto';
 import { Comment } from './entty/comment.entity';
 import { Topic, TopicLike } from './entty/topic.entity';
 
@@ -21,7 +21,7 @@ export class TopicService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
-  async addTopic(userId: number, createTopicDto: CreateTopicDto) {
+  async create(userId: number, createTopicDto: CreateTopicDto) {
     const { content, images } = createTopicDto;
     if (!content) return fail('内容不能为空');
     const user = await this.userRepository.findOne(userId);

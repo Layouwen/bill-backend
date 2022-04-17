@@ -49,7 +49,7 @@ export class CreateRecordDto {
 
 export class UpdateRecordDto extends PartialType(CreateRecordDto) {}
 
-export class SearchRecordListDto extends QueryDto {
+export class GetRecordListDto extends QueryDto {
   @IsString({ message: '开始时间必须是字符串' })
   @IsOptional()
   @ApiPropertyOptional({ example: '2022-2-4', description: '开始时间' })

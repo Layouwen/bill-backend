@@ -2,12 +2,12 @@ import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
-import { created, math, throwFail } from '../../utils';
+import { math, throwFail } from '../../utils';
 import { Category } from '../category/entity/category.entity';
 import { User } from '../user/entity/user.entity';
 import {
   CreateRecordDto,
-  SearchRecordListDto,
+  GetRecordListDto,
   UpdateRecordDto,
 } from './dto/record.dto';
 import { Record } from './entity/record.entity';
@@ -59,7 +59,7 @@ export class RecordService {
     return this.recordRepository.findOne(id);
   }
 
-  async findAll(userId: number, params?: SearchRecordListDto) {
+  async findAll(userId: number, params?: GetRecordListDto) {
     const options = {
       where: { user: userId },
       order: { time: 'DESC', createdAt: 'DESC' },

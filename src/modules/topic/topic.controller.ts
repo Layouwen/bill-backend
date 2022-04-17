@@ -21,7 +21,7 @@ import { FollowService } from '../follow/follow.service';
 import { UserService } from '../user/user.service';
 import { GetTopicListQueryDto } from './dto/get-topic-list-query.dto';
 import {
-  AddCommentDto,
+  CreateCommentDto,
   CreateTopicDto,
   getTopicDetailDto,
 } from './dto/topic.dto';

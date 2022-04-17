@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
@@ -29,13 +30,13 @@ export class getTopicDetailDto {
   id: string;
 }
 
-export class AddCommentDto {
+export class CreateCommentDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({ description: '评论内容' })
   content: string;
 
-  @IsNumberString()
+  @IsNumber()
   @IsOptional()
   @ApiPropertyOptional({ description: '回复评论id', example: '1' })
   replyTo?: string;

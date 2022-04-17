@@ -15,7 +15,7 @@ import { created, deleted, success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   CreateRecordDto,
-  SearchRecordListDto,
+  GetRecordListDto,
   UpdateRecordDto,
 } from './dto/record.dto';
 import { RecordService } from './record.service';
@@ -29,7 +29,7 @@ export class RecordController {
 
   @Get()
   @ApiOperation({ summary: '获取记录' })
-  async findAll(@Request() req, @Query() query: SearchRecordListDto) {
+  async findAll(@Request() req, @Query() query: GetRecordListDto) {
     const data = await this.recordService.findAll(+req.user.id, query);
     return success(data);
   }
