@@ -130,11 +130,11 @@ export class TopicService {
   }
 
   async getUserIsLike(userId, topicId) {
-    const u = await this.userRepository.findOne(userId);
-    const t = await this.topicRepository.findOne(topicId);
+    // const u = await this.userRepository.findOne(userId);
+    // const t = await this.topicRepository.findOne(topicId);
     const like = await this.topicLikeRepository.findOne({
-      user: u,
-      topic: t,
+      user: userId,
+      topic: topicId,
       isLike: true,
     });
     return !!like;
