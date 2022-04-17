@@ -17,7 +17,10 @@ export class UserService {
   }
 
   findOneByName(username: string) {
-    return this.usersRepository.findOne({ where: { username } });
+    return this.usersRepository.findOne({
+      where: { username },
+      select: ['password', 'id'],
+    });
   }
 
   findOneByEmail(email: string) {

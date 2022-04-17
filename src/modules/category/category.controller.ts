@@ -81,7 +81,6 @@ export class CategoryController {
   @Put(':id')
   @ApiOperation({ summary: '更新类别' })
   async update(@Param('id') id: string, @Body() body: UpdateCategoryDto) {
-    console.log(id, 'id');
     await this.categoryService.update(id, body);
     return updated();
   }
