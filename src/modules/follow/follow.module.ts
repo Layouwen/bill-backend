@@ -2,7 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from '../topic/topic.module';
 import { UserModule } from '../user/user.module';
-import { Follow } from './entities/Follow.entity';
+import { Follow } from './entities/follow.entity';
 import { FollowController } from './follow.controller';
 import { FollowService } from './follow.service';
 

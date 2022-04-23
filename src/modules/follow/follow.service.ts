@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { throwFail } from '../../utils';
 import { TopicService } from '../topic/topic.service';
 import { UserService } from '../user/user.service';
-import { Follow } from './entities/Follow.entity';
+import { Follow } from './entities/follow.entity';
 
 @Injectable()
 export class FollowService {
