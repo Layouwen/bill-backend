@@ -74,11 +74,10 @@ export class RecordService {
       const { startDate, endDate, page = 1, pageSize = 10 } = params;
       if (startDate && endDate) {
         options.where.time = Between(
-          dayjs(startDate).toDate(),
-          dayjs(endDate).toDate(),
+          dayjs(startDate).startOf('day').toDate(),
+          dayjs(endDate).endOf('day').toDate(),
         );
-      }
-      if (startDate) {
+      } else if (startDate) {
         options.where.time = Between(
           dayjs(startDate).startOf('month').toDate(),
           dayjs(startDate).endOf('month').toDate(),
