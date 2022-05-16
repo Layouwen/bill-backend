@@ -28,7 +28,7 @@ export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
   @Get()
-  @ApiOperation({ summary: '获取记录' })
+  @ApiOperation({ summary: '明细页数据' })
   async findAll(@Request() req, @Query() query: GetRecordListDto) {
     const data = await this.recordService.findAll(+req.user.id, query);
     return success(data);
