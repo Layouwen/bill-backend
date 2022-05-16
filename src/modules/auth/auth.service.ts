@@ -26,7 +26,7 @@ export class AuthService {
     if (!validatePassword(password)) throwFail('密码必须为8-20位');
 
     const { id } = await this.usersService.create(signDto);
-    return { token: this.jwtService.sign({ username, id }) };
+    return { token: this.jwtService.sign({ username, id }), id };
   }
 
   async validateUser(username: string, password: string): Promise<any> {
@@ -37,5 +37,9 @@ export class AuthService {
       return result;
     }
     return null;
+  }
+
+  async createDefaultCategory(userId: string) {
+    return this.usersService.createDefaultCategory(userId);
   }
 }

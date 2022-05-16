@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { createDefaultCategory } from 'src/utils/createDefaultCategory';
 import { Repository } from 'typeorm';
 import { SignDto } from '../auth/dto/auth.dto';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
@@ -48,5 +49,14 @@ export class UserService {
       { id, password },
       { password: newPassword },
     );
+  }
+
+  createDefaultCategory(userId: string) {
+    return this.usersRepository
+      .createQueryBuilder()
+      .insert()
+      .into('category')
+      .values(createDefaultCategory(userId))
+      .execute();
   }
 }

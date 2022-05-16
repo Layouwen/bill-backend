@@ -62,6 +62,8 @@ export class AuthController {
     delete signDto.email;
     delete session.emailCode;
 
+    await this.authService.createDefaultCategory(data.id + '');
+
     return success(data, '注册成功');
   }
 }
