@@ -66,7 +66,7 @@ export class RecordService {
       relations: ['category'],
     } as ObjectLiteral;
 
-    const [total] = await this.recordRepository.findAndCount(options);
+    const recordData = await this.recordRepository.findAndCount(options);
 
     if (params) {
       const { startDate, endDate, page = 1, pageSize = 10 } = params;
@@ -88,7 +88,7 @@ export class RecordService {
     const data = await this.recordRepository.find(options);
     const income = this.getIncome(data);
     const expend = this.getExpend(data);
-    return { data, total, income, expend };
+    return { data, total: recordData[1], income, expend };
   }
 
   getIncome(data: Record[]) {
