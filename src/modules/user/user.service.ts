@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createDefaultCategory } from 'src/utils/createDefaultCategory';
 import { Repository } from 'typeorm';
+import { throwFail } from '../../utils';
 import { SignDto } from '../auth/dto/auth.dto';
 import { UpdatePasswordDto, UpdateUserInfoDto } from './dto/user.dto';
 import { User } from './entity/user.entity';
@@ -51,7 +52,9 @@ export class UserService {
     );
   }
 
-  createDefaultCategory(userId: string) {
+  async createDefaultCategory(userId: string) {
+    const user = await this.usersRepository.findOne(userId);
+    if (!user) throwFail('用户不存在');
     return this.usersRepository
       .createQueryBuilder()
       .insert()

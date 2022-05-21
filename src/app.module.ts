@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UserInitMiddleware } from './middleware/UserInitMiddleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
+import { CompatibleModule } from './modules/compatible/compatible.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { SystemNotifyModule } from './modules/system-notify/system-notify.module';
 import { ToolsModule } from './modules/tools/tools.module';
@@ -35,6 +36,7 @@ import { CheckInModule } from './modules/check-in/check-in.module';
     FollowModule,
     ToolsModule,
     SystemNotifyModule,
+    CompatibleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
