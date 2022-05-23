@@ -6,7 +6,7 @@ RUN npm i -g npm@8.6.0 && \
 ADD ./bill-backend /app/backend
 ADD ./bill-frontend /app/frontend
 WORKDIR /app/frontend
-RUN pnpm i && pnpm build:docker \
+RUN pnpm i && pnpm build:docker
 WORKDIR /app/backend
 RUN yarn && yarn run build
 EXPOSE 3001
