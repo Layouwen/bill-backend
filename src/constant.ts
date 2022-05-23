@@ -1,4 +1,4 @@
-export const defaultCategory = [
+export const defaultCategoryExpend = [
   {
     name: '餐饮',
     icon: 'catering',
@@ -126,5 +126,32 @@ export const defaultCategory = [
   {
     name: '快递',
     icon: 'express',
+  },
+];
+
+export const defaultCategoryIncome = [
+  {
+    name: '工资',
+    icon: 'salary',
+  },
+  {
+    name: '兼职',
+    icon: 'part-time',
+  },
+  {
+    name: '红包',
+    icon: 'red-envelope',
+  },
+  {
+    name: '礼金',
+    icon: 'cash-gift-income',
+  },
+  {
+    name: '理财',
+    icon: 'financial',
+  },
+  {
+    name: '其他',
+    icon: 'other-money',
   },
 ];

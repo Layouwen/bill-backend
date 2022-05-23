@@ -1,16 +1,27 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsNotEmpty()
   @ApiProperty({
     example: '分类1',
   })
+  @IsString()
   name: string;
 }
 
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   @IsOptional()
-  @ApiProperty({ example: '图标' })
+  @ApiPropertyOptional({ example: '图标' })
   icon?: string;
+}
+
+export class GetCategoryDto {
+  @ApiPropertyOptional({
+    example: '-',
+    enum: ['-', '+'],
+  })
+  @IsOptional()
+  @IsString()
+  type?: string;
 }

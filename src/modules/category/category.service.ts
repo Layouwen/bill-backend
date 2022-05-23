@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectLiteral, Repository } from 'typeorm';
-import { QueryDto } from '../../dto/query.dto';
 import { fail, getFileHash, qiniuOss } from '../../utils';
+import { createCategory } from '../../utils/compatible/category';
+import {
+  createDefaultCategoryExpend,
+  createDefaultCategoryIncome,
+} from '../../utils/createDefaultCategory';
 import { User } from '../user/entity/user.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 import { Category } from './entity/category.entity';
@@ -57,18 +61,30 @@ export class CategoryService {
     return this.categoryRepository.findOne(id);
   }
 
-  async findAll(userId: number, params?: QueryDto) {
+  async findAll(userId: number, type = '-') {
     const options = {
-      where: { user: userId },
+      where: { user: userId, type },
       order: { id: 'DESC' },
     } as ObjectLiteral;
-    const total = await this.categoryRepository.count(options);
-    if (params.page) {
-      const { page = 1, pageSize = 10 } = params;
-      options.skip = page;
-      options.take = pageSize;
+    const hasExpend = await this.categoryRepository.findOne({
+      where: { user: userId, type: '-', icon: 'catering' },
+    });
+    const hasIncome = await this.categoryRepository.findOne({
+      where: { user: userId, type: '+', icon: 'part-time' },
+    });
+    if (!hasIncome) {
+      await createCategory(
+        this.categoryRepository,
+        createDefaultCategoryIncome(userId + ''),
+      );
     }
-    const data = await this.categoryRepository.find(options);
+    if (!hasExpend) {
+      await createCategory(
+        this.categoryRepository,
+        createDefaultCategoryExpend(userId + ''),
+      );
+    }
+    const [data, total] = await this.categoryRepository.findAndCount(options);
     return { data, total };
   }
 }

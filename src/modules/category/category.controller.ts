@@ -20,11 +20,14 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { QueryDto } from '../../dto/query.dto';
 import { created, deleted, success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
+import {
+  CreateCategoryDto,
+  GetCategoryDto,
+  UpdateCategoryDto,
+} from './dto/category.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('Token')
@@ -35,8 +38,8 @@ export class CategoryController {
 
   @Get()
   @ApiOperation({ summary: '获取分类列表' })
-  async findAll(@Request() req, @Query() query: QueryDto) {
-    const data = await this.categoryService.findAll(req.user.id, query);
+  async findAll(@Request() req, @Query() query: GetCategoryDto) {
+    const data = await this.categoryService.findAll(req.user.id, query.type);
     return success(data);
   }
 
