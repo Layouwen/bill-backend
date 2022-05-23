@@ -7,7 +7,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { QueryDto } from '../../../dto/query.dto';
 
 export class CreateRecordDto {
   @IsNotEmpty({ message: '备注不能为空' })
@@ -49,7 +48,7 @@ export class CreateRecordDto {
 
 export class UpdateRecordDto extends PartialType(CreateRecordDto) {}
 
-export class GetRecordListDto extends QueryDto {
+export class GetRecordListDto {
   @IsString({ message: '开始时间必须是字符串' })
   @IsOptional()
   @ApiPropertyOptional({ example: '2022-2-4', description: '开始时间' })

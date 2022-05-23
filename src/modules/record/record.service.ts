@@ -69,7 +69,7 @@ export class RecordService {
     const recordData = await this.recordRepository.findAndCount(options);
 
     if (params) {
-      const { startDate, endDate, page = 1, pageSize = 10 } = params;
+      const { startDate, endDate } = params;
       if (startDate && endDate) {
         options.where.time = Between(
           dayjs(startDate).startOf('day').toDate(),
@@ -81,8 +81,6 @@ export class RecordService {
           dayjs(startDate).endOf('month').toDate(),
         );
       }
-      options.take = pageSize;
-      options.skip = pageSize * (page - 1);
     }
 
     const data = await this.recordRepository.find(options);
