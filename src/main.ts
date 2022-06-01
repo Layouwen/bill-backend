@@ -7,6 +7,7 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { json, urlencoded } from 'express';
 import * as session from 'express-session';
 import { AppModule } from './app.module';
 import * as dayjs from 'dayjs';
@@ -17,6 +18,8 @@ dayjs.extend(isBetween);
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   // app.enable();
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix('api');
