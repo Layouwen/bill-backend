@@ -9,7 +9,11 @@ import {
   Put,
   Param,
   Delete,
+  UploadedFile,
+  UseInterceptors,
+  Req,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { created, deleted, success, updated } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -56,5 +60,13 @@ export class RecordController {
   async remove(@Param('id') id: string) {
     await this.recordService.remove(+id);
     return deleted();
+  }
+
+  @Post('import_data')
+  @ApiOperation({ summary: '导入数据' })
+  @UseInterceptors(FileInterceptor('file'))
+  async importData(@UploadedFile() file: Express.Multer.File, @Req() req) {
+    const res = await this.recordService.importData(file.buffer, req.info.id);
+    return success(res, '导入成功');
   }
 }

@@ -1,6 +1,7 @@
 import * as dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import xlsl from 'node-xlsx';
 import { Between, ObjectLiteral, Repository } from 'typeorm';
 import { math, throwFail } from '../../utils';
 import { Category } from '../category/entity/category.entity';
@@ -11,6 +12,11 @@ import {
   UpdateRecordDto,
 } from './dto/record.dto';
 import { Record } from './entity/record.entity';
+
+const typeMap = {
+  支出: '-',
+  收入: '+',
+};
 
 enum MoneyType {
   INCOME = '+',
@@ -115,6 +121,48 @@ export class RecordService {
       surplus,
     };
   }
+
+  async importData(buffer: Buffer, id: number) {
+    const form = xlsl.parse(buffer);
+    const arr = form[0].data.slice(1) as RecordExcelData[];
+    const categoryMap = await this.getUserAllCategory(id);
+    let count = 0;
+    for (let i = 0; i < arr.length; i++) {
+      const [category, remark, amount, typeZh, time] = arr[i];
+      const categoryId = categoryMap[category];
+      const date = new Date(1900, 0, Number(time) - 1);
+      const type = typeMap[typeZh];
+      if (categoryId && remark && amount && type && time) {
+        try {
+          await this.create(id, {
+            time: date.toISOString(),
+            categoryId: categoryId + '',
+            remark,
+            type,
+            amount: amount + '',
+          });
+          count++;
+        } catch (e) {
+          console.log('--------------------------');
+          console.log('import data error: ' + e);
+          console.log(arr[i]);
+          console.log('--------------------------');
+        }
+      }
+    }
+    return {
+      fail: arr.length - count,
+      all: arr.length,
+    };
+  }
+
+  async getUserAllCategory(id: number) {
+    const data = await this.categoryRepository.find({ where: { user: id } });
+    return data.reduce((pre, { name, id }) => {
+      pre[name] = id;
+      return pre;
+    }, {} as { [key: string]: number });
+  }
 }
 
 const getNowTime = () => {
@@ -130,3 +178,16 @@ const getTimestamp = () => {
     monthStart: dayjs(new Date()).startOf('month').format(),
   };
 };
+
+type RecordExcelData = [
+  CategoryString,
+  RemarkString,
+  AmountNumber,
+  TypeString,
+  TimeString,
+];
+type CategoryString = string;
+type RemarkString = string;
+type AmountNumber = number;
+type TypeString = keyof typeof typeMap;
+type TimeString = string;
