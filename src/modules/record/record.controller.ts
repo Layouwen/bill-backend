@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { created, deleted, success, updated } from '../../utils';
+import { created, deleted, success, updated, fail } from '../../utils';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   CreateRecordDto,
@@ -66,7 +66,10 @@ export class RecordController {
   @ApiOperation({ summary: '导入数据' })
   @UseInterceptors(FileInterceptor('file'))
   async importData(@UploadedFile() file: Express.Multer.File, @Req() req) {
-    const res = await this.recordService.importData(file.buffer, req.info.id);
+    if (!file) return fail('请上传 excel 文件，用于导入数据');
+    if (file.mimetype.indexOf('sheet') === -1)
+      return fail('只支持 xlsx 格式文件');
+    const res = await this.recordService.importData(file.buffer, req.user.id);
     return success(res, '导入成功');
   }
 }
