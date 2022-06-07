@@ -12,6 +12,7 @@ import {
   UpdateRecordDto,
 } from './dto/record.dto';
 import { Record } from './entity/record.entity';
+import { calcEachMonthAmount } from './utils';
 
 const typeMap = {
   支出: '-',
@@ -162,6 +163,19 @@ export class RecordService {
       pre[name] = id;
       return pre;
     }, {} as { [key: string]: number });
+  }
+
+  async getBill(userId: number, year: string) {
+    const res = await this.recordRepository.find({
+      where: {
+        user: userId,
+        time: Between(
+          dayjs(year).startOf('year').toDate(),
+          dayjs(year).endOf('year').toDate(),
+        ),
+      },
+    });
+    return calcEachMonthAmount(res);
   }
 }
 

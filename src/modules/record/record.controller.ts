@@ -72,4 +72,11 @@ export class RecordController {
     const res = await this.recordService.importData(file.buffer, req.user.id);
     return success(res, '导入成功');
   }
+
+  @Get('bill')
+  @ApiOperation({ summary: '获取账单数据' })
+  async getBill(@Req() req, @Query('year') year: string) {
+    const res = await this.recordService.getBill(req.user.id, year);
+    return success(res, '获取成功');
+  }
 }
