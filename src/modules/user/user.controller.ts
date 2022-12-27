@@ -22,20 +22,20 @@ export class UserController {
   @ApiOperation({ summary: '获取用户信息' })
   async getUserInfo(@Req() req) {
     // base info
-    const userInfo = await this.usersService.getUserInfo(req.user.id);
+    const userInfo = await this.usersService.getUserInfo(req.info.id);
 
     // check in info
-    const checkIn = !!(await this.checkInService.hasCheckIn(req.user.id));
+    const checkIn = !!(await this.checkInService.hasCheckIn(req.info.id));
 
     // check day count
     const { checkInAll, checkInKeep } =
-      await this.checkInService.getCheckInInfo(req.user.id);
+      await this.checkInService.getCheckInInfo(req.info.id);
 
     // record quantity
-    const { total } = await this.recordService.findAll(req.user.id);
+    const { total } = await this.recordService.findAll(req.info.id);
 
     // bill record
-    const billRecord = await this.recordService.getBillRecord(req.user.id);
+    const billRecord = await this.recordService.getBillRecord(req.info.id);
     return success({
       ...userInfo,
       checkIn,

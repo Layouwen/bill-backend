@@ -46,6 +46,7 @@ export class RecordService {
     record.type = type;
     record.amount = amount;
     record.category = category;
+    // @ts-ignore
     return await this.recordRepository.save(record);
   }
 

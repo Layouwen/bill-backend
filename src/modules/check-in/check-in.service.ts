@@ -25,6 +25,7 @@ export class CheckInService {
     const checkIn = new CheckIn();
     checkIn.user = await this.userRepository.findOne(userId);
     checkIn.checkInTime = dayjs().format();
+    // @ts-ignore
     return this.checkInRepository.save(checkIn);
   }
 

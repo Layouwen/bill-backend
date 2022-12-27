@@ -56,7 +56,7 @@ export class TopicController {
     @Param('id') id: string,
     @Body() addComment: CreateCommentDto,
   ) {
-    await this.topicService.createComment(req.user.id, id, addComment);
+    await this.topicService.createComment(req.info.id, id, addComment);
     return created('评论成功');
   }
 
@@ -112,7 +112,7 @@ export class TopicController {
   @ApiBearerAuth('Token')
   @ApiOperation({ summary: '创建文章' })
   async addTopic(@Req() req, @Body() addTopicDto: CreateTopicDto) {
-    await this.topicService.create(req.user.id, addTopicDto);
+    await this.topicService.create(req.info.id, addTopicDto);
     return created();
   }
 
@@ -121,7 +121,7 @@ export class TopicController {
   @ApiBearerAuth('Token')
   @ApiOperation({ summary: '点赞' })
   async topicLike(@Req() req, @Param('id') id: number) {
-    const flag = await this.topicService.toggleLike(req.user.id, id);
+    const flag = await this.topicService.toggleLike(req.info.id, id);
     throw new HttpException({ message: flag ? '点赞成功' : '点赞失败' }, 200);
   }
 }

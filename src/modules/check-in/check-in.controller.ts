@@ -14,7 +14,7 @@ export class CheckInController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '打卡' })
   async create(@Req() req) {
-    await this.checkInService.create(req.user.id);
+    await this.checkInService.create(req.info.id);
     return success('打卡成功');
   }
 

@@ -29,6 +29,7 @@ export class TopicService {
     topic.user = user;
     topic.content = content;
     topic.images = images;
+    // @ts-ignore
     return this.topicRepository.save(topic);
   }
 

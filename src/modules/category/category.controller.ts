@@ -39,7 +39,7 @@ export class CategoryController {
   @Get()
   @ApiOperation({ summary: '获取分类列表' })
   async findAll(@Request() req, @Query() query: GetCategoryDto) {
-    const data = await this.categoryService.findAll(req.user.id, query.type);
+    const data = await this.categoryService.findAll(req.info.id, query.type);
     return success(data);
   }
 

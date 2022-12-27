@@ -29,6 +29,7 @@ export class SystemNotifyService {
     systemNotify.content = content;
     systemNotify.isGlobal = isGlobal;
     systemNotify.coverPicture = coverPicture;
+    // @ts-ignore
     return this.systemNotifyRepository.save(systemNotify);
   }
 

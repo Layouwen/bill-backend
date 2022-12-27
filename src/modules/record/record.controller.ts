@@ -34,14 +34,14 @@ export class RecordController {
   @Get()
   @ApiOperation({ summary: '明细页数据' })
   async findAll(@Request() req, @Query() query: GetRecordListDto) {
-    const data = await this.recordService.findAll(+req.user.id, query);
+    const data = await this.recordService.findAll(+req.info.id, query);
     return success(data);
   }
 
   @Post()
   @ApiOperation({ summary: '添加记录' })
   async create(@Request() req, @Body() body: CreateRecordDto) {
-    await this.recordService.create(+req.user.id, body);
+    await this.recordService.create(+req.info.id, body);
     return created();
   }
 
@@ -69,14 +69,14 @@ export class RecordController {
     if (!file) return fail('请上传 excel 文件，用于导入数据');
     if (file.mimetype.indexOf('sheet') === -1)
       return fail('只支持 xlsx 格式文件');
-    const res = await this.recordService.importData(file.buffer, req.user.id);
+    const res = await this.recordService.importData(file.buffer, req.info.id);
     return success(res, '导入成功');
   }
 
   @Get('bill')
   @ApiOperation({ summary: '获取账单数据' })
   async getBill(@Req() req, @Query('year') year: string) {
-    const res = await this.recordService.getBill(req.user.id, year);
+    const res = await this.recordService.getBill(req.info.id, year);
     return success(res, '获取成功');
   }
 }

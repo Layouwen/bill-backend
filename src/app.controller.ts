@@ -1,6 +1,6 @@
 import {
-  Controller,
-  Post,
+  Controller, Get,
+  Post, Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -20,6 +20,8 @@ export class AppController {
   @ApiOperation({ summary: '上传文件' })
   @ApiBearerAuth('Token')
   async uploadFile(@UploadedFile() file, @Req() req) {
+    // console.log(file,'file')
+    // console.log(req,'req')
     if (!file) return fail('上传失败');
     // 阿里云
     // const { url } = await aliOss.uploadFile(
@@ -33,7 +35,7 @@ export class AppController {
     const { url } = await qiniuOss.uploadFile(
       file,
       getFileHash(file),
-      `/user_${req.user.username}/`,
+      `/user_${req.info.username}/`,
     );
     if (url) {
       return success({ url });

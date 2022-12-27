@@ -16,16 +16,16 @@ export class ToolsService {
     html,
   }: EmailCaptchaType) {
     const transporter = nodemailer.createTransport({
-      service: '126',
+      service: 'qq',
       secureConnection: true,
       auth: {
-        user: 'layouwen@126.com',
+        user: '2210258654@qq.com',
         pass: config.emailPassword,
       },
     });
     try {
       await transporter.sendMail({
-        from: 'layouwen@126.com',
+        from: '2210258654@qq.com',
         to: email,
         subject,
         text,
