@@ -15,6 +15,7 @@ import { UserModule } from './modules/user/user.module';
 import { RecordModule } from './modules/record/record.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CheckInModule } from './modules/check-in/check-in.module';
+import { ChartsModule } from './modules/charts/charts.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CheckInModule } from './modules/check-in/check-in.module';
     ToolsModule,
     SystemNotifyModule,
     CompatibleModule,
+    ChartsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

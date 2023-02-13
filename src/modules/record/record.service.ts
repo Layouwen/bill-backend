@@ -75,8 +75,10 @@ export class RecordService {
     } as ObjectLiteral;
 
     const recordData = await this.recordRepository.findAndCount(options);
+    // console.log(recordData,'data')
 
     if (params) {
+      // console.log(params,'params')
       const { startDate, endDate } = params;
       if (startDate && endDate) {
         options.where.time = Between(

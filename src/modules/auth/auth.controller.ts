@@ -29,6 +29,9 @@ export class AuthController {
   })
   @ApiBody({ type: LoginDto })
   async login(@Request() req, @Body() body: LoginDto, @Session() session) {
+    console.log(body,'body')
+    console.log(session,'session')
+    console.log(req,'登录')
     const captcha = body.captcha.toLowerCase();
     if (!captcha || session.captcha !== captcha) return fail('验证码错误');
 

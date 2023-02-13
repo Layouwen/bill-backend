@@ -97,6 +97,7 @@ export class TopicController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '获取文章列表' })
   async getTopics(@Req() req, @Query() query: GetTopicListQueryDto) {
     const topics = await this.topicService.getTopics(

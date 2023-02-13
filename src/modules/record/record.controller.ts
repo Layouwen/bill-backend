@@ -25,15 +25,17 @@ import {
 import { RecordService } from './record.service';
 
 @ApiTags('record')
-@UseGuards(JwtAuthGuard)
 @Controller('record')
 @ApiBearerAuth('Token')
+@UseGuards(JwtAuthGuard)
 export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '明细页数据' })
   async findAll(@Request() req, @Query() query: GetRecordListDto) {
+    console.log(query,'时间')
     const data = await this.recordService.findAll(+req.info.id, query);
     return success(data);
   }
