@@ -20,7 +20,7 @@ export class Record {
   @Column({ type: 'timestamp' })
   time: string;
 
-  @Column({ nullable: false, enum: ['-', '+'] })
+  @Column({ nullable: false, enum: ['sub', 'add'] })
   type: string;
 
   @Column({ nullable: false })

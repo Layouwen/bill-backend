@@ -3,7 +3,7 @@ import { defaultCategoryExpend, defaultCategoryIncome } from '../constant';
 export type CategoryRecord = {
   name: string;
   icon: string;
-  type: '-' | '+';
+  type: 'sub' | 'add';
   user: string | number;
 };
 
@@ -12,7 +12,7 @@ export const createDefaultCategoryExpend = (userId: string) => {
     return {
       ...category,
       user: userId,
-      type: '-',
+      type: 'sub',
     } as CategoryRecord;
   });
 };
@@ -22,7 +22,7 @@ export const createDefaultCategoryIncome = (userId: string) => {
     return {
       ...category,
       user: userId,
-      type: '+',
+      type: 'add',
     } as CategoryRecord;
   });
 };

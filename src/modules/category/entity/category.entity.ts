@@ -21,7 +21,7 @@ export class Category {
   @Column({ type: 'varchar' })
   icon: string;
 
-  @Column({ type: 'enum', enum: ['-', '+'] })
+  @Column({ type: 'enum', enum: ['add', 'sub'] })
   type: string;
 
   @CreateDateColumn()

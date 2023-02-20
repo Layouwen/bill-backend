@@ -67,10 +67,10 @@ export class CategoryService {
       order: { id: 'DESC' },
     } as ObjectLiteral;
     const hasExpend = await this.categoryRepository.findOne({
-      where: { user: userId, type: '-', icon: 'catering' },
+      where: { user: userId, type: 'sub', icon: 'catering' },
     });
     const hasIncome = await this.categoryRepository.findOne({
-      where: { user: userId, type: '+', icon: 'part-time' },
+      where: { user: userId, type: 'add', icon: 'part-time' },
     });
     if (!hasIncome) {
       await createCategory(

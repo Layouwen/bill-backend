@@ -18,8 +18,8 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
 
 export class GetCategoryDto {
   @ApiPropertyOptional({
-    example: '-',
-    enum: ['-', '+'],
+    example: 'sub',
+    enum: ['sub', 'add'],
   })
   @IsOptional()
   @IsString()

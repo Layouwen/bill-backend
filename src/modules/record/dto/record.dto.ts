@@ -31,11 +31,11 @@ export class CreateRecordDto {
   time: string;
 
   @IsNotEmpty({ message: '类型不能为空' })
-  @IsEnum(['-', '+'], { message: '请选择类型' })
+  @IsEnum(['sub', 'add'], { message: '请选择类型' })
   @ApiProperty({
     type: 'enum',
-    enum: ['+', '-'],
-    example: '+',
+    enum: ['add', 'sub'],
+    example: 'add',
     description: '记账类型',
   })
   type: string;

@@ -15,8 +15,8 @@ import { Record } from './entity/record.entity';
 import { calcEachMonthAmount } from './utils';
 
 const typeMap = {
-  支出: '-',
-  收入: '+',
+  支出: 'sub',
+  收入: 'add',
 };
 
 enum MoneyType {
