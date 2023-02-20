@@ -7,8 +7,8 @@ export class CategoryAddType1653291928072 implements MigrationInterface {
       new TableColumn({
         name: 'type',
         type: 'enum',
-        enum: ['-', '+'],
-        default: '"-"',
+        enum: ['sub', 'add'],
+        default: '"sub"',
         isNullable: false,
       }),
     );

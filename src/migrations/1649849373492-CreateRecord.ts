@@ -26,7 +26,7 @@ export class CreateRecord1649849373492 implements MigrationInterface {
           {
             name: 'type',
             type: 'enum',
-            enum: ['-', '+'],
+            enum: ['sub', 'add'],
             isNullable: false,
           },
           {
